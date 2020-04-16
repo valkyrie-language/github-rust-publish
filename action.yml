@@ -1,9 +1,9 @@
-name: 'Deploy Rust to GitHub Pages'
-description: 'Deploy to GitHub Pages by rust yew && trunk.'
+name: 'Rust Auto Publish'
+description: 'Auto publish rust binary to github release'
 author: 'Aster <192607617@qq.com>'
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'index.js'
 branding:
   icon: 'folder-plus'
   color: 'green'
