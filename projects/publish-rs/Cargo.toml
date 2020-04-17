@@ -1,5 +1,5 @@
 [package]
-name = "legion"
+name = "github"
 version = "0.1.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "Valkyrie workspace manager"

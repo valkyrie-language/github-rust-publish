@@ -2,14 +2,14 @@ name: 'Rust Auto Publish'
 description: 'Auto publish rust binary to github release'
 author: 'Aster <192607617@qq.com>'
 runs:
-  using: 'node12'
+  using: 'node22'
   main: 'index.js'
 branding:
-  icon: 'folder-plus'
-  color: 'green'
+  icon: 'package'
+  color: 'orange'
 inputs:
-  wasm:
-    description: 'Optional version of wasm-pack to install (eg. "v0.9.1", "latest")'
+  github:
+    description: 'Sub projects publish to rust'
     required: false
     default: 'latest'
   trunk:

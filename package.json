@@ -15,5 +15,8 @@
         "@bytecodealliance/jco": "^1.8.1",
         "@types/node": "^22",
         "typescript": "^5.7.2"
+    },
+    "dependencies": {
+        "@valkyrie-language/rust-publish": "0.0.0"
     }
 }
