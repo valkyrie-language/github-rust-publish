@@ -1,0 +1,32 @@
+{
+    "name": "@valkyrie-language/legion",
+    "version": "0.1.3",
+    "description": "Legion package manager CLI",
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/valkyrie-language/legion.rs",
+        "directory": "projects/legion-wasm32-wasi"
+    },
+    "type": "module",
+    "types": "src/index.d.js",
+    "typings": "src/index.d.js",
+    "bin": {
+        "legion": "legion.js",
+        "legion-new": "legion-new.js"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "scripts": {
+
+    },
+    "dependencies": {
+        "@bytecodealliance/preview2-shim": "^0.17.1",
+        "create-legion": "0.0.2"
+    },
+    "devDependencies": {
+
+    }
+}

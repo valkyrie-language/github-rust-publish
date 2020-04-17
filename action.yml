@@ -10,9 +10,11 @@ branding:
 inputs:
   wasm:
     description: 'Optional version of wasm-pack to install (eg. "v0.9.1", "latest")'
+    required: false
     default: 'latest'
   trunk:
     description: 'Optional version of trunk to install (eg. "v0.6.0", "latest")'
+    required: false
     default: 'latest'
 outputs:
   DEPLOYMENT_STATUS:

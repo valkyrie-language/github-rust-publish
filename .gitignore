@@ -1,13 +1,19 @@
-# IDEs
-.vscode
-.idea
-.vs
+# OS
+.DS_Store/
+thumbs.db
+time-travel.*
+
+# IDE
+.vscode/
+.vs/
+.idea/
+*.iml
+
+# Rust
+target/
+Cargo.lock
 
 # Node
-node_modules/**
-yarn.lock
-dist/**
-
-# Release
-*.vsix
-*.tgz
+node_modules/
+legion-wasm32-wasi.wasm
+package-lock.json
