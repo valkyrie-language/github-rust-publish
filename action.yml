@@ -1,0 +1,20 @@
+name: Rust Auto Publish
+description: Auto publish rust binary to github release
+author: Aster <192607617@qq.com>
+branding:
+  icon: package
+  color: orange
+runs:
+  using: node20
+  main: rust-publish.js
+env:
+  GITHUB_TOKEN: Secret provided by github.com
+  CRATES_TOKEN: Secret provided by crates.io
+inputs:
+  config:
+    description: Path of the config file
+    required: true
+    default: .config/rust-publish.toml
+outputs:
+  DEPLOYMENT_STATUS:
+    description: 'The status of the deployment that indicates if the run failed or passed. Possible outputs include: success|failed|skipped'

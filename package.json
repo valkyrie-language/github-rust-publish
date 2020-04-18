@@ -1,0 +1,31 @@
+{
+    "name": "@valkyrie-language/rust-publish",
+    "version": "0.0.0",
+    "description": "Legion package manager CLI",
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/valkyrie-language/legion.rs.git",
+        "directory": "projects/legion-wasm32-wasi"
+    },
+    "bin": {
+        "rust-publish": "rust-publish.js"
+    },
+    "type": "module",
+    "main": "src/index.js",
+    "types": "src/index.d.js",
+    "typings": "src/index.d.js",
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
+    "scripts": {
+
+    },
+    "dependencies": {
+        "@bytecodealliance/preview2-shim": "^0.17.1"
+    },
+    "devDependencies": {
+
+    }
+}
