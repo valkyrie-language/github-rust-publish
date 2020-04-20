@@ -17,11 +17,11 @@ impl GithubCLI {
     pub async fn run(self) -> Result<(), GithubError> {
         let args: Vec<String> = std::env::args().collect();
         println!("Args:\n{:#?}", args);
-        let Self { commands, arguments } = self;
-        match commands {
-            Some(s) => s.run(&arguments).await?,
-            None => {}
-        }
+        // let Self { commands, arguments } = self;
+        // match commands {
+        //     Some(s) => s.run(&arguments).await?,
+        //     None => {}
+        // }
         Ok(())
     }
 }

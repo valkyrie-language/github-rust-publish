@@ -1,5 +1,6 @@
 {
     "private": true,
+    "type": "module",
     "workspaces": [
         "projects/*"
     ],
@@ -17,6 +18,6 @@
         "typescript": "^5.7.2"
     },
     "dependencies": {
-        "@valkyrie-language/rust-publish": "0.0.0"
+        "@valkyrie-language/rust-publish": "^0.0.0"
     }
 }

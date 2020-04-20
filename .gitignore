@@ -15,5 +15,5 @@ Cargo.lock
 
 # Node
 node_modules/
-legion-wasm32-wasi.wasm
+github-wasm32-wasi.wasm
 package-lock.json

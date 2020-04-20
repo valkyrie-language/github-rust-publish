@@ -5,16 +5,16 @@
     "license": "UNLICENSED",
     "repository": {
         "type": "git",
-        "url": "https://github.com/valkyrie-language/legion.rs",
+        "url": "git+https://github.com/valkyrie-language/legion.rs.git",
         "directory": "projects/legion-wasm32-wasi"
     },
+    "bin": {
+        "rust-publish": "rust-publish.js"
+    },
     "type": "module",
+    "main": "src/index.js",
     "types": "src/index.d.js",
     "typings": "src/index.d.js",
-    "bin": {
-        "legion": "legion.js",
-        "legion-new": "legion-new.js"
-    },
     "publishConfig": {
         "access": "public",
         "registry": "https://registry.npmjs.org/"
@@ -23,8 +23,7 @@
 
     },
     "dependencies": {
-        "@bytecodealliance/preview2-shim": "^0.17.1",
-        "create-legion": "0.0.2"
+        "@bytecodealliance/preview2-shim": "^0.17.1"
     },
     "devDependencies": {
 

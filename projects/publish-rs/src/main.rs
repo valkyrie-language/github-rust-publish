@@ -1,5 +1,5 @@
 use clap::Parser;
-use legion::{GithubCLI, GithubError};
+use github::{GithubCLI, GithubError};
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), GithubError> {
