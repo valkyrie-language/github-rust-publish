@@ -14,7 +14,7 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - name: Deploy Rust to GitHub Pages
-        uses: valkyrie-language/github-rust-publish@v0.1.5
+        uses: valkyrie-language/github-rust-publish@v0.1.6
         with:
           github: text,
           trunk: "[1, true]"

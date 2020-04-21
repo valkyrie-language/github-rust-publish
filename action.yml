@@ -3,6 +3,7 @@ description: 'Auto publish rust binary to github release'
 author: 'Aster <192607617@qq.com>'
 runs:
   using: 'node20'
+  pre: '.run/npm-install.js'
   main: 'index.js'
 branding:
   icon: 'package'
