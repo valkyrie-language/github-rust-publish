@@ -1,22 +1,27 @@
 name: 'Rust Auto Publish'
 description: 'Auto publish rust binary to github release'
 author: 'Aster <192607617@qq.com>'
-runs:
-  using: 'node20'
-  pre: '.run/npm-install.js'
-  main: 'index.js'
 branding:
   icon: 'package'
   color: 'orange'
+runs:
+  using: 'node20'
+  main: 'projects/publish-wasm32-wasi/rust-publish.js'
+env:
+  GITHUB_TOKEN: "As provided by Github Actions"
 inputs:
   github:
-    description: 'Sub projects publish to rust'
+    description: 'Publish to github release'
     required: false
-    default: 'latest'
-  trunk:
-    description: 'Optional version of trunk to install (eg. "v0.6.0", "latest")'
+    default: '{json}'
+  crates:
+    description: 'Publish to crates'
     required: false
-    default: 'latest'
+    default: '{json}'
+  npm:
+    description: 'Publish to npm'
+    required: false
+    default: '{json}'
 outputs:
   DEPLOYMENT_STATUS:
     description: 'The status of the deployment that indicates if the run failed or passed. Possible outputs include: success|failed|skipped'
