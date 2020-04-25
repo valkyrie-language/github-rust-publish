@@ -1,25 +1,25 @@
-name: 'Rust Auto Publish'
-description: 'Auto publish rust binary to github release'
-author: 'Aster <192607617@qq.com>'
+name: Rust Auto Publish
+description: Auto publish rust binary to github release
+author: Aster <192607617@qq.com>
 branding:
-  icon: 'package'
-  color: 'orange'
+  icon: package
+  color: orange
 runs:
-  using: 'node20'
-  main: 'projects/publish-wasm32-wasi/rust-publish.js'
+  using: node20
+  main: rust-publish.js
 env:
-  GITHUB_TOKEN: "As provided by Github Actions"
+  GITHUB_TOKEN: As provided by Github Actions
 inputs:
   github:
-    description: 'Publish to github release'
+    description: Publish to github release
     required: false
     default: '{json}'
   crates:
-    description: 'Publish to crates'
+    description: Publish to crates
     required: false
     default: '{json}'
   npm:
-    description: 'Publish to npm'
+    description: Publish to npm
     required: false
     default: '{json}'
 outputs:
