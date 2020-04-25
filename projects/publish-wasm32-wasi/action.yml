@@ -10,17 +10,9 @@ runs:
 env:
   GITHUB_TOKEN: As provided by Github Actions
 inputs:
-  github:
-    description: Publish to github release
-    required: false
-    default: '{json}'
-  crates:
-    description: Publish to crates
-    required: false
-    default: '{json}'
-  npm:
-    description: Publish to npm
-    required: false
+  config:
+    description: Path of the config file
+    required: true
     default: '{json}'
 outputs:
   DEPLOYMENT_STATUS:
