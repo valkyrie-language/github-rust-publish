@@ -83,14 +83,6 @@ export { OutputStream };
  * ## `"cross-device"`
  */
 export type ErrorCode = 'access' | 'would-block' | 'already' | 'bad-descriptor' | 'busy' | 'deadlock' | 'quota' | 'exist' | 'file-too-large' | 'illegal-byte-sequence' | 'in-progress' | 'interrupted' | 'invalid' | 'io' | 'is-directory' | 'loop' | 'too-many-links' | 'message-size' | 'name-too-long' | 'no-device' | 'no-entry' | 'no-lock' | 'insufficient-memory' | 'insufficient-space' | 'not-directory' | 'not-empty' | 'not-recoverable' | 'unsupported' | 'no-tty' | 'no-such-device' | 'overflow' | 'not-permitted' | 'pipe' | 'read-only' | 'invalid-seek' | 'text-file-busy' | 'cross-device';
-export interface DescriptorFlags {
-  read?: boolean,
-  write?: boolean,
-  fileIntegritySync?: boolean,
-  dataIntegritySync?: boolean,
-  requestedWriteSync?: boolean,
-  mutateDirectory?: boolean,
-}
 /**
  * # Variants
  * 
@@ -128,7 +120,6 @@ export { Error };
 export class Descriptor {
   writeViaStream(offset: Filesize): OutputStream;
   appendViaStream(): OutputStream;
-  getFlags(): DescriptorFlags;
   getType(): DescriptorType;
   stat(): DescriptorStat;
 }

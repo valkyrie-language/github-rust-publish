@@ -19,13 +19,9 @@
         "access": "public",
         "registry": "https://registry.npmjs.org/"
     },
-    "scripts": {
-
-    },
+    "scripts": {},
     "dependencies": {
+        "@actions/core": "^1.11.1",
         "@bytecodealliance/preview2-shim": "^0.17.1"
-    },
-    "devDependencies": {
-
     }
 }
