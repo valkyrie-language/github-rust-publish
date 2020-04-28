@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
-import {run} from "./src/index.js";
+import {getInput} from '@actions/core';
+import {runWithConfig} from "./src/index.js";
 
-run.run()
+runWithConfig(getInput('config'), getInput('mode'))

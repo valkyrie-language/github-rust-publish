@@ -1,5 +1,6 @@
 export namespace WasiFilesystemTypes {
   export { Descriptor };
+  export { DirectoryEntryStream };
   export function filesystemErrorCode(err: Error): ErrorCode | undefined;
 }
 export type Filesize = bigint;
@@ -83,14 +84,6 @@ export { OutputStream };
  * ## `"cross-device"`
  */
 export type ErrorCode = 'access' | 'would-block' | 'already' | 'bad-descriptor' | 'busy' | 'deadlock' | 'quota' | 'exist' | 'file-too-large' | 'illegal-byte-sequence' | 'in-progress' | 'interrupted' | 'invalid' | 'io' | 'is-directory' | 'loop' | 'too-many-links' | 'message-size' | 'name-too-long' | 'no-device' | 'no-entry' | 'no-lock' | 'insufficient-memory' | 'insufficient-space' | 'not-directory' | 'not-empty' | 'not-recoverable' | 'unsupported' | 'no-tty' | 'no-such-device' | 'overflow' | 'not-permitted' | 'pipe' | 'read-only' | 'invalid-seek' | 'text-file-busy' | 'cross-device';
-export interface DescriptorFlags {
-  read?: boolean,
-  write?: boolean,
-  fileIntegritySync?: boolean,
-  dataIntegritySync?: boolean,
-  requestedWriteSync?: boolean,
-  mutateDirectory?: boolean,
-}
 /**
  * # Variants
  * 
@@ -122,13 +115,45 @@ export interface DescriptorStat {
   dataModificationTimestamp?: Datetime,
   statusChangeTimestamp?: Datetime,
 }
+export interface PathFlags {
+  symlinkFollow?: boolean,
+}
+export interface OpenFlags {
+  create?: boolean,
+  directory?: boolean,
+  exclusive?: boolean,
+  truncate?: boolean,
+}
+export interface DescriptorFlags {
+  read?: boolean,
+  write?: boolean,
+  fileIntegritySync?: boolean,
+  dataIntegritySync?: boolean,
+  requestedWriteSync?: boolean,
+  mutateDirectory?: boolean,
+}
+export interface MetadataHashValue {
+  lower: bigint,
+  upper: bigint,
+}
+export interface DirectoryEntry {
+  type: DescriptorType,
+  name: string,
+}
 import type { Error } from './wasi-io-streams.js';
 export { Error };
 
 export class Descriptor {
   writeViaStream(offset: Filesize): OutputStream;
   appendViaStream(): OutputStream;
-  getFlags(): DescriptorFlags;
   getType(): DescriptorType;
+  readDirectory(): DirectoryEntryStream;
   stat(): DescriptorStat;
+  openAt(pathFlags: PathFlags, path: string, openFlags: OpenFlags, flags: DescriptorFlags): Descriptor;
+  metadataHash(): MetadataHashValue;
+  metadataHashAt(pathFlags: PathFlags, path: string): MetadataHashValue;
+}
+
+export class DirectoryEntryStream {
+  readDirectoryEntry(): DirectoryEntry | undefined;
 }

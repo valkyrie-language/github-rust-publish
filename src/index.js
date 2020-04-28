@@ -1,20 +1,15 @@
-import { environment, exit as exit$1, stderr, stdin, stdout, terminalInput, terminalOutput, terminalStderr, terminalStdin, terminalStdout } from '@bytecodealliance/preview2-shim/cli';
+import { environment, exit as exit$1, stderr, stdin, stdout } from '@bytecodealliance/preview2-shim/cli';
 import { preopens, types } from '@bytecodealliance/preview2-shim/filesystem';
 import { error, streams } from '@bytecodealliance/preview2-shim/io';
 import { random } from '@bytecodealliance/preview2-shim/random';
-const { getArguments,
-  getEnvironment } = environment;
+const { getEnvironment } = environment;
 const { exit } = exit$1;
 const { getStderr } = stderr;
 const { getStdin } = stdin;
 const { getStdout } = stdout;
-const { TerminalInput } = terminalInput;
-const { TerminalOutput } = terminalOutput;
-const { getTerminalStderr } = terminalStderr;
-const { getTerminalStdin } = terminalStdin;
-const { getTerminalStdout } = terminalStdout;
 const { getDirectories } = preopens;
 const { Descriptor,
+  DirectoryEntryStream,
   filesystemErrorCode } = types;
 const { Error: Error$1 } = error;
 const { InputStream,
@@ -98,6 +93,8 @@ function toUint32(val) {
   return val >>> 0;
 }
 
+const utf8Decoder = new TextDecoder();
+
 const utf8Encoder = new TextEncoder();
 
 let utf8EncodedLen = 0;
@@ -117,21 +114,21 @@ function utf8Encode(s, realloc, memory) {
 
 let exports0;
 let exports1;
-const handleTable1 = [T_FLAG, 0];
-const captureTable1= new Map();
-let captureCnt1 = 0;
-handleTables[1] = handleTable1;
+const handleTable3 = [T_FLAG, 0];
+const captureTable3= new Map();
+let captureCnt3 = 0;
+handleTables[3] = handleTable3;
 
-function trampoline4() {
+function trampoline12() {
   const ret = getStderr();
   if (!(ret instanceof OutputStream)) {
     throw new TypeError('Resource error: Not a valid "OutputStream" resource.');
   }
   var handle0 = ret[symbolRscHandle];
   if (!handle0) {
-    const rep = ret[symbolRscRep] || ++captureCnt1;
-    captureTable1.set(rep, ret);
-    handle0 = rscTableCreateOwn(handleTable1, rep);
+    const rep = ret[symbolRscRep] || ++captureCnt3;
+    captureTable3.set(rep, ret);
+    handle0 = rscTableCreateOwn(handleTable3, rep);
   }
   return handle0;
 }
@@ -140,7 +137,7 @@ const captureTable2= new Map();
 let captureCnt2 = 0;
 handleTables[2] = handleTable2;
 
-function trampoline7() {
+function trampoline13() {
   const ret = getStdin();
   if (!(ret instanceof InputStream)) {
     throw new TypeError('Resource error: Not a valid "InputStream" resource.');
@@ -154,21 +151,21 @@ function trampoline7() {
   return handle0;
 }
 
-function trampoline8() {
+function trampoline14() {
   const ret = getStdout();
   if (!(ret instanceof OutputStream)) {
     throw new TypeError('Resource error: Not a valid "OutputStream" resource.');
   }
   var handle0 = ret[symbolRscHandle];
   if (!handle0) {
-    const rep = ret[symbolRscRep] || ++captureCnt1;
-    captureTable1.set(rep, ret);
-    handle0 = rscTableCreateOwn(handleTable1, rep);
+    const rep = ret[symbolRscRep] || ++captureCnt3;
+    captureTable3.set(rep, ret);
+    handle0 = rscTableCreateOwn(handleTable3, rep);
   }
   return handle0;
 }
 
-function trampoline9(arg0) {
+function trampoline15(arg0) {
   let variant0;
   if (arg0) {
     variant0= {
@@ -187,23 +184,7 @@ let exports2;
 let memory0;
 let realloc0;
 
-function trampoline10(arg0) {
-  const ret = getArguments();
-  var vec1 = ret;
-  var len1 = vec1.length;
-  var result1 = realloc0(0, 0, 4, len1 * 8);
-  for (let i = 0; i < vec1.length; i++) {
-    const e = vec1[i];
-    const base = result1 + i * 8;var ptr0 = utf8Encode(e, realloc0, memory0);
-    var len0 = utf8EncodedLen;
-    dataView(memory0).setInt32(base + 4, len0, true);
-    dataView(memory0).setInt32(base + 0, ptr0, true);
-  }
-  dataView(memory0).setInt32(arg0 + 4, len1, true);
-  dataView(memory0).setInt32(arg0 + 0, result1, true);
-}
-
-function trampoline11(arg0) {
+function trampoline16(arg0) {
   const ret = getEnvironment();
   var vec3 = ret;
   var len3 = vec3.length;
@@ -223,218 +204,12 @@ function trampoline11(arg0) {
   dataView(memory0).setInt32(arg0 + 4, len3, true);
   dataView(memory0).setInt32(arg0 + 0, result3, true);
 }
-const handleTable5 = [T_FLAG, 0];
-const captureTable5= new Map();
-let captureCnt5 = 0;
-handleTables[5] = handleTable5;
-
-function trampoline12(arg0, arg1) {
-  var handle1 = arg0;
-  var rep2 = handleTable5[(handle1 << 1) + 1] & ~T_FLAG;
-  var rsc0 = captureTable5.get(rep2);
-  if (!rsc0) {
-    rsc0 = Object.create(Descriptor.prototype);
-    Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
-    Object.defineProperty(rsc0, symbolRscRep, { writable: true, value: rep2});
-  }
-  curResourceBorrows.push(rsc0);
-  let ret;
-  try {
-    ret = { tag: 'ok', val: rsc0.getFlags()};
-  } catch (e) {
-    ret = { tag: 'err', val: getErrorPayload(e) };
-  }
-  for (const rsc of curResourceBorrows) {
-    rsc[symbolRscHandle] = undefined;
-  }
-  curResourceBorrows = [];
-  var variant5 = ret;
-  switch (variant5.tag) {
-    case 'ok': {
-      const e = variant5.val;
-      dataView(memory0).setInt8(arg1 + 0, 0, true);
-      let flags3 = 0;
-      if (typeof e === 'object' && e !== null) {
-        flags3 = Boolean(e.read) << 0 | Boolean(e.write) << 1 | Boolean(e.fileIntegritySync) << 2 | Boolean(e.dataIntegritySync) << 3 | Boolean(e.requestedWriteSync) << 4 | Boolean(e.mutateDirectory) << 5;
-      } else if (e !== null && e!== undefined) {
-        throw new TypeError('only an object, undefined or null can be converted to flags');
-      }
-      dataView(memory0).setInt8(arg1 + 1, flags3, true);
-      break;
-    }
-    case 'err': {
-      const e = variant5.val;
-      dataView(memory0).setInt8(arg1 + 0, 1, true);
-      var val4 = e;
-      let enum4;
-      switch (val4) {
-        case 'access': {
-          enum4 = 0;
-          break;
-        }
-        case 'would-block': {
-          enum4 = 1;
-          break;
-        }
-        case 'already': {
-          enum4 = 2;
-          break;
-        }
-        case 'bad-descriptor': {
-          enum4 = 3;
-          break;
-        }
-        case 'busy': {
-          enum4 = 4;
-          break;
-        }
-        case 'deadlock': {
-          enum4 = 5;
-          break;
-        }
-        case 'quota': {
-          enum4 = 6;
-          break;
-        }
-        case 'exist': {
-          enum4 = 7;
-          break;
-        }
-        case 'file-too-large': {
-          enum4 = 8;
-          break;
-        }
-        case 'illegal-byte-sequence': {
-          enum4 = 9;
-          break;
-        }
-        case 'in-progress': {
-          enum4 = 10;
-          break;
-        }
-        case 'interrupted': {
-          enum4 = 11;
-          break;
-        }
-        case 'invalid': {
-          enum4 = 12;
-          break;
-        }
-        case 'io': {
-          enum4 = 13;
-          break;
-        }
-        case 'is-directory': {
-          enum4 = 14;
-          break;
-        }
-        case 'loop': {
-          enum4 = 15;
-          break;
-        }
-        case 'too-many-links': {
-          enum4 = 16;
-          break;
-        }
-        case 'message-size': {
-          enum4 = 17;
-          break;
-        }
-        case 'name-too-long': {
-          enum4 = 18;
-          break;
-        }
-        case 'no-device': {
-          enum4 = 19;
-          break;
-        }
-        case 'no-entry': {
-          enum4 = 20;
-          break;
-        }
-        case 'no-lock': {
-          enum4 = 21;
-          break;
-        }
-        case 'insufficient-memory': {
-          enum4 = 22;
-          break;
-        }
-        case 'insufficient-space': {
-          enum4 = 23;
-          break;
-        }
-        case 'not-directory': {
-          enum4 = 24;
-          break;
-        }
-        case 'not-empty': {
-          enum4 = 25;
-          break;
-        }
-        case 'not-recoverable': {
-          enum4 = 26;
-          break;
-        }
-        case 'unsupported': {
-          enum4 = 27;
-          break;
-        }
-        case 'no-tty': {
-          enum4 = 28;
-          break;
-        }
-        case 'no-such-device': {
-          enum4 = 29;
-          break;
-        }
-        case 'overflow': {
-          enum4 = 30;
-          break;
-        }
-        case 'not-permitted': {
-          enum4 = 31;
-          break;
-        }
-        case 'pipe': {
-          enum4 = 32;
-          break;
-        }
-        case 'read-only': {
-          enum4 = 33;
-          break;
-        }
-        case 'invalid-seek': {
-          enum4 = 34;
-          break;
-        }
-        case 'text-file-busy': {
-          enum4 = 35;
-          break;
-        }
-        case 'cross-device': {
-          enum4 = 36;
-          break;
-        }
-        default: {
-          
-          throw new TypeError(`"${val4}" is not one of the cases of error-code`);
-        }
-      }
-      dataView(memory0).setInt8(arg1 + 1, enum4, true);
-      break;
-    }
-    default: {
-      throw new TypeError('invalid variant specified for result');
-    }
-  }
-}
 const handleTable0 = [T_FLAG, 0];
 const captureTable0= new Map();
 let captureCnt0 = 0;
 handleTables[0] = handleTable0;
 
-function trampoline13(arg0, arg1) {
+function trampoline17(arg0, arg1) {
   var handle1 = arg0;
   var rep2 = handleTable0[(handle1 << 1) + 1] & ~T_FLAG;
   var rsc0 = captureTable0.get(rep2);
@@ -614,11 +389,19 @@ function trampoline13(arg0, arg1) {
     dataView(memory0).setInt8(arg1 + 1, enum3, true);
   }
 }
+const handleTable4 = [T_FLAG, 0];
+const captureTable4= new Map();
+let captureCnt4 = 0;
+handleTables[4] = handleTable4;
+const handleTable5 = [T_FLAG, 0];
+const captureTable5= new Map();
+let captureCnt5 = 0;
+handleTables[5] = handleTable5;
 
-function trampoline14(arg0, arg1, arg2) {
+function trampoline18(arg0, arg1) {
   var handle1 = arg0;
-  var rep2 = handleTable5[(handle1 << 1) + 1] & ~T_FLAG;
-  var rsc0 = captureTable5.get(rep2);
+  var rep2 = handleTable4[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable4.get(rep2);
   if (!rsc0) {
     rsc0 = Object.create(Descriptor.prototype);
     Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
@@ -627,212 +410,7 @@ function trampoline14(arg0, arg1, arg2) {
   curResourceBorrows.push(rsc0);
   let ret;
   try {
-    ret = { tag: 'ok', val: rsc0.writeViaStream(BigInt.asUintN(64, arg1))};
-  } catch (e) {
-    ret = { tag: 'err', val: getErrorPayload(e) };
-  }
-  for (const rsc of curResourceBorrows) {
-    rsc[symbolRscHandle] = undefined;
-  }
-  curResourceBorrows = [];
-  var variant5 = ret;
-  switch (variant5.tag) {
-    case 'ok': {
-      const e = variant5.val;
-      dataView(memory0).setInt8(arg2 + 0, 0, true);
-      if (!(e instanceof OutputStream)) {
-        throw new TypeError('Resource error: Not a valid "OutputStream" resource.');
-      }
-      var handle3 = e[symbolRscHandle];
-      if (!handle3) {
-        const rep = e[symbolRscRep] || ++captureCnt1;
-        captureTable1.set(rep, e);
-        handle3 = rscTableCreateOwn(handleTable1, rep);
-      }
-      dataView(memory0).setInt32(arg2 + 4, handle3, true);
-      break;
-    }
-    case 'err': {
-      const e = variant5.val;
-      dataView(memory0).setInt8(arg2 + 0, 1, true);
-      var val4 = e;
-      let enum4;
-      switch (val4) {
-        case 'access': {
-          enum4 = 0;
-          break;
-        }
-        case 'would-block': {
-          enum4 = 1;
-          break;
-        }
-        case 'already': {
-          enum4 = 2;
-          break;
-        }
-        case 'bad-descriptor': {
-          enum4 = 3;
-          break;
-        }
-        case 'busy': {
-          enum4 = 4;
-          break;
-        }
-        case 'deadlock': {
-          enum4 = 5;
-          break;
-        }
-        case 'quota': {
-          enum4 = 6;
-          break;
-        }
-        case 'exist': {
-          enum4 = 7;
-          break;
-        }
-        case 'file-too-large': {
-          enum4 = 8;
-          break;
-        }
-        case 'illegal-byte-sequence': {
-          enum4 = 9;
-          break;
-        }
-        case 'in-progress': {
-          enum4 = 10;
-          break;
-        }
-        case 'interrupted': {
-          enum4 = 11;
-          break;
-        }
-        case 'invalid': {
-          enum4 = 12;
-          break;
-        }
-        case 'io': {
-          enum4 = 13;
-          break;
-        }
-        case 'is-directory': {
-          enum4 = 14;
-          break;
-        }
-        case 'loop': {
-          enum4 = 15;
-          break;
-        }
-        case 'too-many-links': {
-          enum4 = 16;
-          break;
-        }
-        case 'message-size': {
-          enum4 = 17;
-          break;
-        }
-        case 'name-too-long': {
-          enum4 = 18;
-          break;
-        }
-        case 'no-device': {
-          enum4 = 19;
-          break;
-        }
-        case 'no-entry': {
-          enum4 = 20;
-          break;
-        }
-        case 'no-lock': {
-          enum4 = 21;
-          break;
-        }
-        case 'insufficient-memory': {
-          enum4 = 22;
-          break;
-        }
-        case 'insufficient-space': {
-          enum4 = 23;
-          break;
-        }
-        case 'not-directory': {
-          enum4 = 24;
-          break;
-        }
-        case 'not-empty': {
-          enum4 = 25;
-          break;
-        }
-        case 'not-recoverable': {
-          enum4 = 26;
-          break;
-        }
-        case 'unsupported': {
-          enum4 = 27;
-          break;
-        }
-        case 'no-tty': {
-          enum4 = 28;
-          break;
-        }
-        case 'no-such-device': {
-          enum4 = 29;
-          break;
-        }
-        case 'overflow': {
-          enum4 = 30;
-          break;
-        }
-        case 'not-permitted': {
-          enum4 = 31;
-          break;
-        }
-        case 'pipe': {
-          enum4 = 32;
-          break;
-        }
-        case 'read-only': {
-          enum4 = 33;
-          break;
-        }
-        case 'invalid-seek': {
-          enum4 = 34;
-          break;
-        }
-        case 'text-file-busy': {
-          enum4 = 35;
-          break;
-        }
-        case 'cross-device': {
-          enum4 = 36;
-          break;
-        }
-        default: {
-          
-          throw new TypeError(`"${val4}" is not one of the cases of error-code`);
-        }
-      }
-      dataView(memory0).setInt8(arg2 + 4, enum4, true);
-      break;
-    }
-    default: {
-      throw new TypeError('invalid variant specified for result');
-    }
-  }
-}
-
-function trampoline15(arg0, arg1) {
-  var handle1 = arg0;
-  var rep2 = handleTable5[(handle1 << 1) + 1] & ~T_FLAG;
-  var rsc0 = captureTable5.get(rep2);
-  if (!rsc0) {
-    rsc0 = Object.create(Descriptor.prototype);
-    Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
-    Object.defineProperty(rsc0, symbolRscRep, { writable: true, value: rep2});
-  }
-  curResourceBorrows.push(rsc0);
-  let ret;
-  try {
-    ret = { tag: 'ok', val: rsc0.appendViaStream()};
+    ret = { tag: 'ok', val: rsc0.readDirectory()};
   } catch (e) {
     ret = { tag: 'err', val: getErrorPayload(e) };
   }
@@ -845,14 +423,14 @@ function trampoline15(arg0, arg1) {
     case 'ok': {
       const e = variant5.val;
       dataView(memory0).setInt8(arg1 + 0, 0, true);
-      if (!(e instanceof OutputStream)) {
-        throw new TypeError('Resource error: Not a valid "OutputStream" resource.');
+      if (!(e instanceof DirectoryEntryStream)) {
+        throw new TypeError('Resource error: Not a valid "DirectoryEntryStream" resource.');
       }
       var handle3 = e[symbolRscHandle];
       if (!handle3) {
-        const rep = e[symbolRscRep] || ++captureCnt1;
-        captureTable1.set(rep, e);
-        handle3 = rscTableCreateOwn(handleTable1, rep);
+        const rep = e[symbolRscRep] || ++captureCnt5;
+        captureTable5.set(rep, e);
+        handle3 = rscTableCreateOwn(handleTable5, rep);
       }
       dataView(memory0).setInt32(arg1 + 4, handle3, true);
       break;
@@ -1025,10 +603,893 @@ function trampoline15(arg0, arg1) {
   }
 }
 
-function trampoline16(arg0, arg1) {
+function trampoline19(arg0, arg1) {
   var handle1 = arg0;
   var rep2 = handleTable5[(handle1 << 1) + 1] & ~T_FLAG;
   var rsc0 = captureTable5.get(rep2);
+  if (!rsc0) {
+    rsc0 = Object.create(DirectoryEntryStream.prototype);
+    Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
+    Object.defineProperty(rsc0, symbolRscRep, { writable: true, value: rep2});
+  }
+  curResourceBorrows.push(rsc0);
+  let ret;
+  try {
+    ret = { tag: 'ok', val: rsc0.readDirectoryEntry()};
+  } catch (e) {
+    ret = { tag: 'err', val: getErrorPayload(e) };
+  }
+  for (const rsc of curResourceBorrows) {
+    rsc[symbolRscHandle] = undefined;
+  }
+  curResourceBorrows = [];
+  var variant8 = ret;
+  switch (variant8.tag) {
+    case 'ok': {
+      const e = variant8.val;
+      dataView(memory0).setInt8(arg1 + 0, 0, true);
+      var variant6 = e;
+      if (variant6 === null || variant6=== undefined) {
+        dataView(memory0).setInt8(arg1 + 4, 0, true);
+      } else {
+        const e = variant6;
+        dataView(memory0).setInt8(arg1 + 4, 1, true);
+        var {type: v3_0, name: v3_1 } = e;
+        var val4 = v3_0;
+        let enum4;
+        switch (val4) {
+          case 'unknown': {
+            enum4 = 0;
+            break;
+          }
+          case 'block-device': {
+            enum4 = 1;
+            break;
+          }
+          case 'character-device': {
+            enum4 = 2;
+            break;
+          }
+          case 'directory': {
+            enum4 = 3;
+            break;
+          }
+          case 'fifo': {
+            enum4 = 4;
+            break;
+          }
+          case 'symbolic-link': {
+            enum4 = 5;
+            break;
+          }
+          case 'regular-file': {
+            enum4 = 6;
+            break;
+          }
+          case 'socket': {
+            enum4 = 7;
+            break;
+          }
+          default: {
+            
+            throw new TypeError(`"${val4}" is not one of the cases of descriptor-type`);
+          }
+        }
+        dataView(memory0).setInt8(arg1 + 8, enum4, true);
+        var ptr5 = utf8Encode(v3_1, realloc0, memory0);
+        var len5 = utf8EncodedLen;
+        dataView(memory0).setInt32(arg1 + 16, len5, true);
+        dataView(memory0).setInt32(arg1 + 12, ptr5, true);
+      }
+      break;
+    }
+    case 'err': {
+      const e = variant8.val;
+      dataView(memory0).setInt8(arg1 + 0, 1, true);
+      var val7 = e;
+      let enum7;
+      switch (val7) {
+        case 'access': {
+          enum7 = 0;
+          break;
+        }
+        case 'would-block': {
+          enum7 = 1;
+          break;
+        }
+        case 'already': {
+          enum7 = 2;
+          break;
+        }
+        case 'bad-descriptor': {
+          enum7 = 3;
+          break;
+        }
+        case 'busy': {
+          enum7 = 4;
+          break;
+        }
+        case 'deadlock': {
+          enum7 = 5;
+          break;
+        }
+        case 'quota': {
+          enum7 = 6;
+          break;
+        }
+        case 'exist': {
+          enum7 = 7;
+          break;
+        }
+        case 'file-too-large': {
+          enum7 = 8;
+          break;
+        }
+        case 'illegal-byte-sequence': {
+          enum7 = 9;
+          break;
+        }
+        case 'in-progress': {
+          enum7 = 10;
+          break;
+        }
+        case 'interrupted': {
+          enum7 = 11;
+          break;
+        }
+        case 'invalid': {
+          enum7 = 12;
+          break;
+        }
+        case 'io': {
+          enum7 = 13;
+          break;
+        }
+        case 'is-directory': {
+          enum7 = 14;
+          break;
+        }
+        case 'loop': {
+          enum7 = 15;
+          break;
+        }
+        case 'too-many-links': {
+          enum7 = 16;
+          break;
+        }
+        case 'message-size': {
+          enum7 = 17;
+          break;
+        }
+        case 'name-too-long': {
+          enum7 = 18;
+          break;
+        }
+        case 'no-device': {
+          enum7 = 19;
+          break;
+        }
+        case 'no-entry': {
+          enum7 = 20;
+          break;
+        }
+        case 'no-lock': {
+          enum7 = 21;
+          break;
+        }
+        case 'insufficient-memory': {
+          enum7 = 22;
+          break;
+        }
+        case 'insufficient-space': {
+          enum7 = 23;
+          break;
+        }
+        case 'not-directory': {
+          enum7 = 24;
+          break;
+        }
+        case 'not-empty': {
+          enum7 = 25;
+          break;
+        }
+        case 'not-recoverable': {
+          enum7 = 26;
+          break;
+        }
+        case 'unsupported': {
+          enum7 = 27;
+          break;
+        }
+        case 'no-tty': {
+          enum7 = 28;
+          break;
+        }
+        case 'no-such-device': {
+          enum7 = 29;
+          break;
+        }
+        case 'overflow': {
+          enum7 = 30;
+          break;
+        }
+        case 'not-permitted': {
+          enum7 = 31;
+          break;
+        }
+        case 'pipe': {
+          enum7 = 32;
+          break;
+        }
+        case 'read-only': {
+          enum7 = 33;
+          break;
+        }
+        case 'invalid-seek': {
+          enum7 = 34;
+          break;
+        }
+        case 'text-file-busy': {
+          enum7 = 35;
+          break;
+        }
+        case 'cross-device': {
+          enum7 = 36;
+          break;
+        }
+        default: {
+          
+          throw new TypeError(`"${val7}" is not one of the cases of error-code`);
+        }
+      }
+      dataView(memory0).setInt8(arg1 + 4, enum7, true);
+      break;
+    }
+    default: {
+      throw new TypeError('invalid variant specified for result');
+    }
+  }
+}
+
+function trampoline20(arg0, arg1, arg2, arg3, arg4, arg5, arg6) {
+  var handle1 = arg0;
+  var rep2 = handleTable4[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable4.get(rep2);
+  if (!rsc0) {
+    rsc0 = Object.create(Descriptor.prototype);
+    Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
+    Object.defineProperty(rsc0, symbolRscRep, { writable: true, value: rep2});
+  }
+  curResourceBorrows.push(rsc0);
+  var flags3 = {
+    symlinkFollow: Boolean(arg1 & 1),
+  };
+  var ptr4 = arg2;
+  var len4 = arg3;
+  var result4 = utf8Decoder.decode(new Uint8Array(memory0.buffer, ptr4, len4));
+  var flags5 = {
+    create: Boolean(arg4 & 1),
+    directory: Boolean(arg4 & 2),
+    exclusive: Boolean(arg4 & 4),
+    truncate: Boolean(arg4 & 8),
+  };
+  var flags6 = {
+    read: Boolean(arg5 & 1),
+    write: Boolean(arg5 & 2),
+    fileIntegritySync: Boolean(arg5 & 4),
+    dataIntegritySync: Boolean(arg5 & 8),
+    requestedWriteSync: Boolean(arg5 & 16),
+    mutateDirectory: Boolean(arg5 & 32),
+  };
+  let ret;
+  try {
+    ret = { tag: 'ok', val: rsc0.openAt(flags3, result4, flags5, flags6)};
+  } catch (e) {
+    ret = { tag: 'err', val: getErrorPayload(e) };
+  }
+  for (const rsc of curResourceBorrows) {
+    rsc[symbolRscHandle] = undefined;
+  }
+  curResourceBorrows = [];
+  var variant9 = ret;
+  switch (variant9.tag) {
+    case 'ok': {
+      const e = variant9.val;
+      dataView(memory0).setInt8(arg6 + 0, 0, true);
+      if (!(e instanceof Descriptor)) {
+        throw new TypeError('Resource error: Not a valid "Descriptor" resource.');
+      }
+      var handle7 = e[symbolRscHandle];
+      if (!handle7) {
+        const rep = e[symbolRscRep] || ++captureCnt4;
+        captureTable4.set(rep, e);
+        handle7 = rscTableCreateOwn(handleTable4, rep);
+      }
+      dataView(memory0).setInt32(arg6 + 4, handle7, true);
+      break;
+    }
+    case 'err': {
+      const e = variant9.val;
+      dataView(memory0).setInt8(arg6 + 0, 1, true);
+      var val8 = e;
+      let enum8;
+      switch (val8) {
+        case 'access': {
+          enum8 = 0;
+          break;
+        }
+        case 'would-block': {
+          enum8 = 1;
+          break;
+        }
+        case 'already': {
+          enum8 = 2;
+          break;
+        }
+        case 'bad-descriptor': {
+          enum8 = 3;
+          break;
+        }
+        case 'busy': {
+          enum8 = 4;
+          break;
+        }
+        case 'deadlock': {
+          enum8 = 5;
+          break;
+        }
+        case 'quota': {
+          enum8 = 6;
+          break;
+        }
+        case 'exist': {
+          enum8 = 7;
+          break;
+        }
+        case 'file-too-large': {
+          enum8 = 8;
+          break;
+        }
+        case 'illegal-byte-sequence': {
+          enum8 = 9;
+          break;
+        }
+        case 'in-progress': {
+          enum8 = 10;
+          break;
+        }
+        case 'interrupted': {
+          enum8 = 11;
+          break;
+        }
+        case 'invalid': {
+          enum8 = 12;
+          break;
+        }
+        case 'io': {
+          enum8 = 13;
+          break;
+        }
+        case 'is-directory': {
+          enum8 = 14;
+          break;
+        }
+        case 'loop': {
+          enum8 = 15;
+          break;
+        }
+        case 'too-many-links': {
+          enum8 = 16;
+          break;
+        }
+        case 'message-size': {
+          enum8 = 17;
+          break;
+        }
+        case 'name-too-long': {
+          enum8 = 18;
+          break;
+        }
+        case 'no-device': {
+          enum8 = 19;
+          break;
+        }
+        case 'no-entry': {
+          enum8 = 20;
+          break;
+        }
+        case 'no-lock': {
+          enum8 = 21;
+          break;
+        }
+        case 'insufficient-memory': {
+          enum8 = 22;
+          break;
+        }
+        case 'insufficient-space': {
+          enum8 = 23;
+          break;
+        }
+        case 'not-directory': {
+          enum8 = 24;
+          break;
+        }
+        case 'not-empty': {
+          enum8 = 25;
+          break;
+        }
+        case 'not-recoverable': {
+          enum8 = 26;
+          break;
+        }
+        case 'unsupported': {
+          enum8 = 27;
+          break;
+        }
+        case 'no-tty': {
+          enum8 = 28;
+          break;
+        }
+        case 'no-such-device': {
+          enum8 = 29;
+          break;
+        }
+        case 'overflow': {
+          enum8 = 30;
+          break;
+        }
+        case 'not-permitted': {
+          enum8 = 31;
+          break;
+        }
+        case 'pipe': {
+          enum8 = 32;
+          break;
+        }
+        case 'read-only': {
+          enum8 = 33;
+          break;
+        }
+        case 'invalid-seek': {
+          enum8 = 34;
+          break;
+        }
+        case 'text-file-busy': {
+          enum8 = 35;
+          break;
+        }
+        case 'cross-device': {
+          enum8 = 36;
+          break;
+        }
+        default: {
+          
+          throw new TypeError(`"${val8}" is not one of the cases of error-code`);
+        }
+      }
+      dataView(memory0).setInt8(arg6 + 4, enum8, true);
+      break;
+    }
+    default: {
+      throw new TypeError('invalid variant specified for result');
+    }
+  }
+}
+
+function trampoline21(arg0, arg1, arg2) {
+  var handle1 = arg0;
+  var rep2 = handleTable4[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable4.get(rep2);
+  if (!rsc0) {
+    rsc0 = Object.create(Descriptor.prototype);
+    Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
+    Object.defineProperty(rsc0, symbolRscRep, { writable: true, value: rep2});
+  }
+  curResourceBorrows.push(rsc0);
+  let ret;
+  try {
+    ret = { tag: 'ok', val: rsc0.writeViaStream(BigInt.asUintN(64, arg1))};
+  } catch (e) {
+    ret = { tag: 'err', val: getErrorPayload(e) };
+  }
+  for (const rsc of curResourceBorrows) {
+    rsc[symbolRscHandle] = undefined;
+  }
+  curResourceBorrows = [];
+  var variant5 = ret;
+  switch (variant5.tag) {
+    case 'ok': {
+      const e = variant5.val;
+      dataView(memory0).setInt8(arg2 + 0, 0, true);
+      if (!(e instanceof OutputStream)) {
+        throw new TypeError('Resource error: Not a valid "OutputStream" resource.');
+      }
+      var handle3 = e[symbolRscHandle];
+      if (!handle3) {
+        const rep = e[symbolRscRep] || ++captureCnt3;
+        captureTable3.set(rep, e);
+        handle3 = rscTableCreateOwn(handleTable3, rep);
+      }
+      dataView(memory0).setInt32(arg2 + 4, handle3, true);
+      break;
+    }
+    case 'err': {
+      const e = variant5.val;
+      dataView(memory0).setInt8(arg2 + 0, 1, true);
+      var val4 = e;
+      let enum4;
+      switch (val4) {
+        case 'access': {
+          enum4 = 0;
+          break;
+        }
+        case 'would-block': {
+          enum4 = 1;
+          break;
+        }
+        case 'already': {
+          enum4 = 2;
+          break;
+        }
+        case 'bad-descriptor': {
+          enum4 = 3;
+          break;
+        }
+        case 'busy': {
+          enum4 = 4;
+          break;
+        }
+        case 'deadlock': {
+          enum4 = 5;
+          break;
+        }
+        case 'quota': {
+          enum4 = 6;
+          break;
+        }
+        case 'exist': {
+          enum4 = 7;
+          break;
+        }
+        case 'file-too-large': {
+          enum4 = 8;
+          break;
+        }
+        case 'illegal-byte-sequence': {
+          enum4 = 9;
+          break;
+        }
+        case 'in-progress': {
+          enum4 = 10;
+          break;
+        }
+        case 'interrupted': {
+          enum4 = 11;
+          break;
+        }
+        case 'invalid': {
+          enum4 = 12;
+          break;
+        }
+        case 'io': {
+          enum4 = 13;
+          break;
+        }
+        case 'is-directory': {
+          enum4 = 14;
+          break;
+        }
+        case 'loop': {
+          enum4 = 15;
+          break;
+        }
+        case 'too-many-links': {
+          enum4 = 16;
+          break;
+        }
+        case 'message-size': {
+          enum4 = 17;
+          break;
+        }
+        case 'name-too-long': {
+          enum4 = 18;
+          break;
+        }
+        case 'no-device': {
+          enum4 = 19;
+          break;
+        }
+        case 'no-entry': {
+          enum4 = 20;
+          break;
+        }
+        case 'no-lock': {
+          enum4 = 21;
+          break;
+        }
+        case 'insufficient-memory': {
+          enum4 = 22;
+          break;
+        }
+        case 'insufficient-space': {
+          enum4 = 23;
+          break;
+        }
+        case 'not-directory': {
+          enum4 = 24;
+          break;
+        }
+        case 'not-empty': {
+          enum4 = 25;
+          break;
+        }
+        case 'not-recoverable': {
+          enum4 = 26;
+          break;
+        }
+        case 'unsupported': {
+          enum4 = 27;
+          break;
+        }
+        case 'no-tty': {
+          enum4 = 28;
+          break;
+        }
+        case 'no-such-device': {
+          enum4 = 29;
+          break;
+        }
+        case 'overflow': {
+          enum4 = 30;
+          break;
+        }
+        case 'not-permitted': {
+          enum4 = 31;
+          break;
+        }
+        case 'pipe': {
+          enum4 = 32;
+          break;
+        }
+        case 'read-only': {
+          enum4 = 33;
+          break;
+        }
+        case 'invalid-seek': {
+          enum4 = 34;
+          break;
+        }
+        case 'text-file-busy': {
+          enum4 = 35;
+          break;
+        }
+        case 'cross-device': {
+          enum4 = 36;
+          break;
+        }
+        default: {
+          
+          throw new TypeError(`"${val4}" is not one of the cases of error-code`);
+        }
+      }
+      dataView(memory0).setInt8(arg2 + 4, enum4, true);
+      break;
+    }
+    default: {
+      throw new TypeError('invalid variant specified for result');
+    }
+  }
+}
+
+function trampoline22(arg0, arg1) {
+  var handle1 = arg0;
+  var rep2 = handleTable4[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable4.get(rep2);
+  if (!rsc0) {
+    rsc0 = Object.create(Descriptor.prototype);
+    Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
+    Object.defineProperty(rsc0, symbolRscRep, { writable: true, value: rep2});
+  }
+  curResourceBorrows.push(rsc0);
+  let ret;
+  try {
+    ret = { tag: 'ok', val: rsc0.appendViaStream()};
+  } catch (e) {
+    ret = { tag: 'err', val: getErrorPayload(e) };
+  }
+  for (const rsc of curResourceBorrows) {
+    rsc[symbolRscHandle] = undefined;
+  }
+  curResourceBorrows = [];
+  var variant5 = ret;
+  switch (variant5.tag) {
+    case 'ok': {
+      const e = variant5.val;
+      dataView(memory0).setInt8(arg1 + 0, 0, true);
+      if (!(e instanceof OutputStream)) {
+        throw new TypeError('Resource error: Not a valid "OutputStream" resource.');
+      }
+      var handle3 = e[symbolRscHandle];
+      if (!handle3) {
+        const rep = e[symbolRscRep] || ++captureCnt3;
+        captureTable3.set(rep, e);
+        handle3 = rscTableCreateOwn(handleTable3, rep);
+      }
+      dataView(memory0).setInt32(arg1 + 4, handle3, true);
+      break;
+    }
+    case 'err': {
+      const e = variant5.val;
+      dataView(memory0).setInt8(arg1 + 0, 1, true);
+      var val4 = e;
+      let enum4;
+      switch (val4) {
+        case 'access': {
+          enum4 = 0;
+          break;
+        }
+        case 'would-block': {
+          enum4 = 1;
+          break;
+        }
+        case 'already': {
+          enum4 = 2;
+          break;
+        }
+        case 'bad-descriptor': {
+          enum4 = 3;
+          break;
+        }
+        case 'busy': {
+          enum4 = 4;
+          break;
+        }
+        case 'deadlock': {
+          enum4 = 5;
+          break;
+        }
+        case 'quota': {
+          enum4 = 6;
+          break;
+        }
+        case 'exist': {
+          enum4 = 7;
+          break;
+        }
+        case 'file-too-large': {
+          enum4 = 8;
+          break;
+        }
+        case 'illegal-byte-sequence': {
+          enum4 = 9;
+          break;
+        }
+        case 'in-progress': {
+          enum4 = 10;
+          break;
+        }
+        case 'interrupted': {
+          enum4 = 11;
+          break;
+        }
+        case 'invalid': {
+          enum4 = 12;
+          break;
+        }
+        case 'io': {
+          enum4 = 13;
+          break;
+        }
+        case 'is-directory': {
+          enum4 = 14;
+          break;
+        }
+        case 'loop': {
+          enum4 = 15;
+          break;
+        }
+        case 'too-many-links': {
+          enum4 = 16;
+          break;
+        }
+        case 'message-size': {
+          enum4 = 17;
+          break;
+        }
+        case 'name-too-long': {
+          enum4 = 18;
+          break;
+        }
+        case 'no-device': {
+          enum4 = 19;
+          break;
+        }
+        case 'no-entry': {
+          enum4 = 20;
+          break;
+        }
+        case 'no-lock': {
+          enum4 = 21;
+          break;
+        }
+        case 'insufficient-memory': {
+          enum4 = 22;
+          break;
+        }
+        case 'insufficient-space': {
+          enum4 = 23;
+          break;
+        }
+        case 'not-directory': {
+          enum4 = 24;
+          break;
+        }
+        case 'not-empty': {
+          enum4 = 25;
+          break;
+        }
+        case 'not-recoverable': {
+          enum4 = 26;
+          break;
+        }
+        case 'unsupported': {
+          enum4 = 27;
+          break;
+        }
+        case 'no-tty': {
+          enum4 = 28;
+          break;
+        }
+        case 'no-such-device': {
+          enum4 = 29;
+          break;
+        }
+        case 'overflow': {
+          enum4 = 30;
+          break;
+        }
+        case 'not-permitted': {
+          enum4 = 31;
+          break;
+        }
+        case 'pipe': {
+          enum4 = 32;
+          break;
+        }
+        case 'read-only': {
+          enum4 = 33;
+          break;
+        }
+        case 'invalid-seek': {
+          enum4 = 34;
+          break;
+        }
+        case 'text-file-busy': {
+          enum4 = 35;
+          break;
+        }
+        case 'cross-device': {
+          enum4 = 36;
+          break;
+        }
+        default: {
+          
+          throw new TypeError(`"${val4}" is not one of the cases of error-code`);
+        }
+      }
+      dataView(memory0).setInt8(arg1 + 4, enum4, true);
+      break;
+    }
+    default: {
+      throw new TypeError('invalid variant specified for result');
+    }
+  }
+}
+
+function trampoline23(arg0, arg1) {
+  var handle1 = arg0;
+  var rep2 = handleTable4[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable4.get(rep2);
   if (!rsc0) {
     rsc0 = Object.create(Descriptor.prototype);
     Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
@@ -1261,10 +1722,10 @@ function trampoline16(arg0, arg1) {
   }
 }
 
-function trampoline17(arg0, arg1) {
+function trampoline24(arg0, arg1) {
   var handle1 = arg0;
-  var rep2 = handleTable5[(handle1 << 1) + 1] & ~T_FLAG;
-  var rsc0 = captureTable5.get(rep2);
+  var rep2 = handleTable4[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable4.get(rep2);
   if (!rsc0) {
     rsc0 = Object.create(Descriptor.prototype);
     Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
@@ -1530,10 +1991,412 @@ function trampoline17(arg0, arg1) {
   }
 }
 
-function trampoline18(arg0, arg1) {
+function trampoline25(arg0, arg1) {
   var handle1 = arg0;
-  var rep2 = handleTable1[(handle1 << 1) + 1] & ~T_FLAG;
-  var rsc0 = captureTable1.get(rep2);
+  var rep2 = handleTable4[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable4.get(rep2);
+  if (!rsc0) {
+    rsc0 = Object.create(Descriptor.prototype);
+    Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
+    Object.defineProperty(rsc0, symbolRscRep, { writable: true, value: rep2});
+  }
+  curResourceBorrows.push(rsc0);
+  let ret;
+  try {
+    ret = { tag: 'ok', val: rsc0.metadataHash()};
+  } catch (e) {
+    ret = { tag: 'err', val: getErrorPayload(e) };
+  }
+  for (const rsc of curResourceBorrows) {
+    rsc[symbolRscHandle] = undefined;
+  }
+  curResourceBorrows = [];
+  var variant5 = ret;
+  switch (variant5.tag) {
+    case 'ok': {
+      const e = variant5.val;
+      dataView(memory0).setInt8(arg1 + 0, 0, true);
+      var {lower: v3_0, upper: v3_1 } = e;
+      dataView(memory0).setBigInt64(arg1 + 8, toUint64(v3_0), true);
+      dataView(memory0).setBigInt64(arg1 + 16, toUint64(v3_1), true);
+      break;
+    }
+    case 'err': {
+      const e = variant5.val;
+      dataView(memory0).setInt8(arg1 + 0, 1, true);
+      var val4 = e;
+      let enum4;
+      switch (val4) {
+        case 'access': {
+          enum4 = 0;
+          break;
+        }
+        case 'would-block': {
+          enum4 = 1;
+          break;
+        }
+        case 'already': {
+          enum4 = 2;
+          break;
+        }
+        case 'bad-descriptor': {
+          enum4 = 3;
+          break;
+        }
+        case 'busy': {
+          enum4 = 4;
+          break;
+        }
+        case 'deadlock': {
+          enum4 = 5;
+          break;
+        }
+        case 'quota': {
+          enum4 = 6;
+          break;
+        }
+        case 'exist': {
+          enum4 = 7;
+          break;
+        }
+        case 'file-too-large': {
+          enum4 = 8;
+          break;
+        }
+        case 'illegal-byte-sequence': {
+          enum4 = 9;
+          break;
+        }
+        case 'in-progress': {
+          enum4 = 10;
+          break;
+        }
+        case 'interrupted': {
+          enum4 = 11;
+          break;
+        }
+        case 'invalid': {
+          enum4 = 12;
+          break;
+        }
+        case 'io': {
+          enum4 = 13;
+          break;
+        }
+        case 'is-directory': {
+          enum4 = 14;
+          break;
+        }
+        case 'loop': {
+          enum4 = 15;
+          break;
+        }
+        case 'too-many-links': {
+          enum4 = 16;
+          break;
+        }
+        case 'message-size': {
+          enum4 = 17;
+          break;
+        }
+        case 'name-too-long': {
+          enum4 = 18;
+          break;
+        }
+        case 'no-device': {
+          enum4 = 19;
+          break;
+        }
+        case 'no-entry': {
+          enum4 = 20;
+          break;
+        }
+        case 'no-lock': {
+          enum4 = 21;
+          break;
+        }
+        case 'insufficient-memory': {
+          enum4 = 22;
+          break;
+        }
+        case 'insufficient-space': {
+          enum4 = 23;
+          break;
+        }
+        case 'not-directory': {
+          enum4 = 24;
+          break;
+        }
+        case 'not-empty': {
+          enum4 = 25;
+          break;
+        }
+        case 'not-recoverable': {
+          enum4 = 26;
+          break;
+        }
+        case 'unsupported': {
+          enum4 = 27;
+          break;
+        }
+        case 'no-tty': {
+          enum4 = 28;
+          break;
+        }
+        case 'no-such-device': {
+          enum4 = 29;
+          break;
+        }
+        case 'overflow': {
+          enum4 = 30;
+          break;
+        }
+        case 'not-permitted': {
+          enum4 = 31;
+          break;
+        }
+        case 'pipe': {
+          enum4 = 32;
+          break;
+        }
+        case 'read-only': {
+          enum4 = 33;
+          break;
+        }
+        case 'invalid-seek': {
+          enum4 = 34;
+          break;
+        }
+        case 'text-file-busy': {
+          enum4 = 35;
+          break;
+        }
+        case 'cross-device': {
+          enum4 = 36;
+          break;
+        }
+        default: {
+          
+          throw new TypeError(`"${val4}" is not one of the cases of error-code`);
+        }
+      }
+      dataView(memory0).setInt8(arg1 + 8, enum4, true);
+      break;
+    }
+    default: {
+      throw new TypeError('invalid variant specified for result');
+    }
+  }
+}
+
+function trampoline26(arg0, arg1, arg2, arg3, arg4) {
+  var handle1 = arg0;
+  var rep2 = handleTable4[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable4.get(rep2);
+  if (!rsc0) {
+    rsc0 = Object.create(Descriptor.prototype);
+    Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
+    Object.defineProperty(rsc0, symbolRscRep, { writable: true, value: rep2});
+  }
+  curResourceBorrows.push(rsc0);
+  var flags3 = {
+    symlinkFollow: Boolean(arg1 & 1),
+  };
+  var ptr4 = arg2;
+  var len4 = arg3;
+  var result4 = utf8Decoder.decode(new Uint8Array(memory0.buffer, ptr4, len4));
+  let ret;
+  try {
+    ret = { tag: 'ok', val: rsc0.metadataHashAt(flags3, result4)};
+  } catch (e) {
+    ret = { tag: 'err', val: getErrorPayload(e) };
+  }
+  for (const rsc of curResourceBorrows) {
+    rsc[symbolRscHandle] = undefined;
+  }
+  curResourceBorrows = [];
+  var variant7 = ret;
+  switch (variant7.tag) {
+    case 'ok': {
+      const e = variant7.val;
+      dataView(memory0).setInt8(arg4 + 0, 0, true);
+      var {lower: v5_0, upper: v5_1 } = e;
+      dataView(memory0).setBigInt64(arg4 + 8, toUint64(v5_0), true);
+      dataView(memory0).setBigInt64(arg4 + 16, toUint64(v5_1), true);
+      break;
+    }
+    case 'err': {
+      const e = variant7.val;
+      dataView(memory0).setInt8(arg4 + 0, 1, true);
+      var val6 = e;
+      let enum6;
+      switch (val6) {
+        case 'access': {
+          enum6 = 0;
+          break;
+        }
+        case 'would-block': {
+          enum6 = 1;
+          break;
+        }
+        case 'already': {
+          enum6 = 2;
+          break;
+        }
+        case 'bad-descriptor': {
+          enum6 = 3;
+          break;
+        }
+        case 'busy': {
+          enum6 = 4;
+          break;
+        }
+        case 'deadlock': {
+          enum6 = 5;
+          break;
+        }
+        case 'quota': {
+          enum6 = 6;
+          break;
+        }
+        case 'exist': {
+          enum6 = 7;
+          break;
+        }
+        case 'file-too-large': {
+          enum6 = 8;
+          break;
+        }
+        case 'illegal-byte-sequence': {
+          enum6 = 9;
+          break;
+        }
+        case 'in-progress': {
+          enum6 = 10;
+          break;
+        }
+        case 'interrupted': {
+          enum6 = 11;
+          break;
+        }
+        case 'invalid': {
+          enum6 = 12;
+          break;
+        }
+        case 'io': {
+          enum6 = 13;
+          break;
+        }
+        case 'is-directory': {
+          enum6 = 14;
+          break;
+        }
+        case 'loop': {
+          enum6 = 15;
+          break;
+        }
+        case 'too-many-links': {
+          enum6 = 16;
+          break;
+        }
+        case 'message-size': {
+          enum6 = 17;
+          break;
+        }
+        case 'name-too-long': {
+          enum6 = 18;
+          break;
+        }
+        case 'no-device': {
+          enum6 = 19;
+          break;
+        }
+        case 'no-entry': {
+          enum6 = 20;
+          break;
+        }
+        case 'no-lock': {
+          enum6 = 21;
+          break;
+        }
+        case 'insufficient-memory': {
+          enum6 = 22;
+          break;
+        }
+        case 'insufficient-space': {
+          enum6 = 23;
+          break;
+        }
+        case 'not-directory': {
+          enum6 = 24;
+          break;
+        }
+        case 'not-empty': {
+          enum6 = 25;
+          break;
+        }
+        case 'not-recoverable': {
+          enum6 = 26;
+          break;
+        }
+        case 'unsupported': {
+          enum6 = 27;
+          break;
+        }
+        case 'no-tty': {
+          enum6 = 28;
+          break;
+        }
+        case 'no-such-device': {
+          enum6 = 29;
+          break;
+        }
+        case 'overflow': {
+          enum6 = 30;
+          break;
+        }
+        case 'not-permitted': {
+          enum6 = 31;
+          break;
+        }
+        case 'pipe': {
+          enum6 = 32;
+          break;
+        }
+        case 'read-only': {
+          enum6 = 33;
+          break;
+        }
+        case 'invalid-seek': {
+          enum6 = 34;
+          break;
+        }
+        case 'text-file-busy': {
+          enum6 = 35;
+          break;
+        }
+        case 'cross-device': {
+          enum6 = 36;
+          break;
+        }
+        default: {
+          
+          throw new TypeError(`"${val6}" is not one of the cases of error-code`);
+        }
+      }
+      dataView(memory0).setInt8(arg4 + 8, enum6, true);
+      break;
+    }
+    default: {
+      throw new TypeError('invalid variant specified for result');
+    }
+  }
+}
+
+function trampoline27(arg0, arg1) {
+  var handle1 = arg0;
+  var rep2 = handleTable3[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable3.get(rep2);
   if (!rsc0) {
     rsc0 = Object.create(OutputStream.prototype);
     Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
@@ -1594,10 +2457,10 @@ function trampoline18(arg0, arg1) {
   }
 }
 
-function trampoline19(arg0, arg1, arg2, arg3) {
+function trampoline28(arg0, arg1, arg2, arg3) {
   var handle1 = arg0;
-  var rep2 = handleTable1[(handle1 << 1) + 1] & ~T_FLAG;
-  var rsc0 = captureTable1.get(rep2);
+  var rep2 = handleTable3[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable3.get(rep2);
   if (!rsc0) {
     rsc0 = Object.create(OutputStream.prototype);
     Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
@@ -1660,10 +2523,10 @@ function trampoline19(arg0, arg1, arg2, arg3) {
   }
 }
 
-function trampoline20(arg0, arg1) {
+function trampoline29(arg0, arg1) {
   var handle1 = arg0;
-  var rep2 = handleTable1[(handle1 << 1) + 1] & ~T_FLAG;
-  var rsc0 = captureTable1.get(rep2);
+  var rep2 = handleTable3[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable3.get(rep2);
   if (!rsc0) {
     rsc0 = Object.create(OutputStream.prototype);
     Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
@@ -1723,10 +2586,10 @@ function trampoline20(arg0, arg1) {
   }
 }
 
-function trampoline21(arg0, arg1, arg2, arg3) {
+function trampoline30(arg0, arg1, arg2, arg3) {
   var handle1 = arg0;
-  var rep2 = handleTable1[(handle1 << 1) + 1] & ~T_FLAG;
-  var rsc0 = captureTable1.get(rep2);
+  var rep2 = handleTable3[(handle1 << 1) + 1] & ~T_FLAG;
+  var rsc0 = captureTable3.get(rep2);
   if (!rsc0) {
     rsc0 = Object.create(OutputStream.prototype);
     Object.defineProperty(rsc0, symbolRscHandle, { writable: true, value: handle1});
@@ -1789,7 +2652,7 @@ function trampoline21(arg0, arg1, arg2, arg3) {
   }
 }
 
-function trampoline22(arg0, arg1) {
+function trampoline31(arg0, arg1) {
   const ret = getRandomBytes(BigInt.asUintN(64, arg0));
   var val0 = ret;
   var len0 = val0.byteLength;
@@ -1800,7 +2663,7 @@ function trampoline22(arg0, arg1) {
   dataView(memory0).setInt32(arg1 + 0, ptr0, true);
 }
 
-function trampoline23(arg0) {
+function trampoline32(arg0) {
   const ret = getDirectories();
   var vec3 = ret;
   var len3 = vec3.length;
@@ -1813,9 +2676,9 @@ function trampoline23(arg0) {
     }
     var handle1 = tuple0_0[symbolRscHandle];
     if (!handle1) {
-      const rep = tuple0_0[symbolRscRep] || ++captureCnt5;
-      captureTable5.set(rep, tuple0_0);
-      handle1 = rscTableCreateOwn(handleTable5, rep);
+      const rep = tuple0_0[symbolRscRep] || ++captureCnt4;
+      captureTable4.set(rep, tuple0_0);
+      handle1 = rscTableCreateOwn(handleTable4, rep);
     }
     dataView(memory0).setInt32(base + 0, handle1, true);
     var ptr2 = utf8Encode(tuple0_1, realloc0, memory0);
@@ -1826,139 +2689,81 @@ function trampoline23(arg0) {
   dataView(memory0).setInt32(arg0 + 4, len3, true);
   dataView(memory0).setInt32(arg0 + 0, result3, true);
 }
-const handleTable3 = [T_FLAG, 0];
-const captureTable3= new Map();
-let captureCnt3 = 0;
-handleTables[3] = handleTable3;
-
-function trampoline24(arg0) {
-  const ret = getTerminalStdin();
-  var variant1 = ret;
-  if (variant1 === null || variant1=== undefined) {
-    dataView(memory0).setInt8(arg0 + 0, 0, true);
-  } else {
-    const e = variant1;
-    dataView(memory0).setInt8(arg0 + 0, 1, true);
-    if (!(e instanceof TerminalInput)) {
-      throw new TypeError('Resource error: Not a valid "TerminalInput" resource.');
-    }
-    var handle0 = e[symbolRscHandle];
-    if (!handle0) {
-      const rep = e[symbolRscRep] || ++captureCnt3;
-      captureTable3.set(rep, e);
-      handle0 = rscTableCreateOwn(handleTable3, rep);
-    }
-    dataView(memory0).setInt32(arg0 + 4, handle0, true);
-  }
-}
-const handleTable4 = [T_FLAG, 0];
-const captureTable4= new Map();
-let captureCnt4 = 0;
-handleTables[4] = handleTable4;
-
-function trampoline25(arg0) {
-  const ret = getTerminalStdout();
-  var variant1 = ret;
-  if (variant1 === null || variant1=== undefined) {
-    dataView(memory0).setInt8(arg0 + 0, 0, true);
-  } else {
-    const e = variant1;
-    dataView(memory0).setInt8(arg0 + 0, 1, true);
-    if (!(e instanceof TerminalOutput)) {
-      throw new TypeError('Resource error: Not a valid "TerminalOutput" resource.');
-    }
-    var handle0 = e[symbolRscHandle];
-    if (!handle0) {
-      const rep = e[symbolRscRep] || ++captureCnt4;
-      captureTable4.set(rep, e);
-      handle0 = rscTableCreateOwn(handleTable4, rep);
-    }
-    dataView(memory0).setInt32(arg0 + 4, handle0, true);
-  }
-}
-
-function trampoline26(arg0) {
-  const ret = getTerminalStderr();
-  var variant1 = ret;
-  if (variant1 === null || variant1=== undefined) {
-    dataView(memory0).setInt8(arg0 + 0, 0, true);
-  } else {
-    const e = variant1;
-    dataView(memory0).setInt8(arg0 + 0, 1, true);
-    if (!(e instanceof TerminalOutput)) {
-      throw new TypeError('Resource error: Not a valid "TerminalOutput" resource.');
-    }
-    var handle0 = e[symbolRscHandle];
-    if (!handle0) {
-      const rep = e[symbolRscRep] || ++captureCnt4;
-      captureTable4.set(rep, e);
-      handle0 = rscTableCreateOwn(handleTable4, rep);
-    }
-    dataView(memory0).setInt32(arg0 + 4, handle0, true);
-  }
-}
 let exports3;
+let realloc1;
+let postReturn0;
 
-function run() {
-  const ret = exports2['wasi:cli/run@0.2.0#run']();
-  let variant0;
-  if (ret) {
-    variant0= {
+function runWithConfig(arg0, arg1) {
+  var ptr0 = utf8Encode(arg0, realloc1, memory0);
+  var len0 = utf8EncodedLen;
+  var val1 = arg1;
+  let enum1;
+  switch (val1) {
+    case 'all': {
+      enum1 = 0;
+      break;
+    }
+    case 'github': {
+      enum1 = 1;
+      break;
+    }
+    case 'npm': {
+      enum1 = 2;
+      break;
+    }
+    case 'cargo': {
+      enum1 = 3;
+      break;
+    }
+    default: {
+      
+      throw new TypeError(`"${val1}" is not one of the cases of github-target`);
+    }
+  }
+  const ret = exports1['run-with-config'](ptr0, len0, enum1);
+  let variant4;
+  if (dataView(memory0).getUint8(ret + 0, true)) {
+    let variant3;
+    switch (dataView(memory0).getUint8(ret + 4, true)) {
+      case 0: {
+        var ptr2 = dataView(memory0).getInt32(ret + 8, true);
+        var len2 = dataView(memory0).getInt32(ret + 12, true);
+        var result2 = utf8Decoder.decode(new Uint8Array(memory0.buffer, ptr2, len2));
+        variant3= {
+          tag: 'custom',
+          val: result2
+        };
+        break;
+      }
+    }
+    variant4= {
       tag: 'err',
-      val: undefined
+      val: variant3
     };
   } else {
-    variant0= {
+    variant4= {
       tag: 'ok',
       val: undefined
     };
   }
-  const retVal = variant0;
+  const retVal = variant4;
+  postReturn0(ret);
   if (typeof retVal === 'object' && retVal.tag === 'err') {
     throw new ComponentError(retVal.val);
   }
   return retVal.val;
 }
+const handleTable1 = [T_FLAG, 0];
+const captureTable1= new Map();
+let captureCnt1 = 0;
+handleTables[1] = handleTable1;
 function trampoline0(handle) {
-  const handleEntry = rscTableRemove(handleTable5, handle);
+  const handleEntry = rscTableRemove(handleTable1, handle);
   if (handleEntry.own) {
-    
-    const rsc = captureTable5.get(handleEntry.rep);
-    if (rsc) {
-      if (rsc[symbolDispose]) rsc[symbolDispose]();
-      captureTable5.delete(handleEntry.rep);
-    } else if (Descriptor[symbolCabiDispose]) {
-      Descriptor[symbolCabiDispose](handleEntry.rep);
-    }
+    throw new TypeError('unreachable resource trampoline')
   }
 }
 function trampoline1(handle) {
-  const handleEntry = rscTableRemove(handleTable1, handle);
-  if (handleEntry.own) {
-    
-    const rsc = captureTable1.get(handleEntry.rep);
-    if (rsc) {
-      if (rsc[symbolDispose]) rsc[symbolDispose]();
-      captureTable1.delete(handleEntry.rep);
-    } else if (OutputStream[symbolCabiDispose]) {
-      OutputStream[symbolCabiDispose](handleEntry.rep);
-    }
-  }
-}
-function trampoline2(handle) {
-  const handleEntry = rscTableRemove(handleTable0, handle);
-  if (handleEntry.own) {
-    
-    const rsc = captureTable0.get(handleEntry.rep);
-    if (rsc) {
-      if (rsc[symbolDispose]) rsc[symbolDispose]();
-      captureTable0.delete(handleEntry.rep);
-    } else if (Error$1[symbolCabiDispose]) {
-      Error$1[symbolCabiDispose](handleEntry.rep);
-    }
-  }
-}
-function trampoline3(handle) {
   const handleEntry = rscTableRemove(handleTable2, handle);
   if (handleEntry.own) {
     
@@ -1971,7 +2776,7 @@ function trampoline3(handle) {
     }
   }
 }
-function trampoline5(handle) {
+function trampoline2(handle) {
   const handleEntry = rscTableRemove(handleTable3, handle);
   if (handleEntry.own) {
     
@@ -1979,12 +2784,65 @@ function trampoline5(handle) {
     if (rsc) {
       if (rsc[symbolDispose]) rsc[symbolDispose]();
       captureTable3.delete(handleEntry.rep);
-    } else if (TerminalInput[symbolCabiDispose]) {
-      TerminalInput[symbolCabiDispose](handleEntry.rep);
+    } else if (OutputStream[symbolCabiDispose]) {
+      OutputStream[symbolCabiDispose](handleEntry.rep);
     }
   }
 }
+const handleTable6 = [T_FLAG, 0];
+const captureTable6= new Map();
+let captureCnt6 = 0;
+handleTables[6] = handleTable6;
+function trampoline3(handle) {
+  const handleEntry = rscTableRemove(handleTable6, handle);
+  if (handleEntry.own) {
+    throw new TypeError('unreachable resource trampoline')
+  }
+}
+const handleTable7 = [T_FLAG, 0];
+const captureTable7= new Map();
+let captureCnt7 = 0;
+handleTables[7] = handleTable7;
+function trampoline4(handle) {
+  const handleEntry = rscTableRemove(handleTable7, handle);
+  if (handleEntry.own) {
+    throw new TypeError('unreachable resource trampoline')
+  }
+}
+const handleTable8 = [T_FLAG, 0];
+const captureTable8= new Map();
+let captureCnt8 = 0;
+handleTables[8] = handleTable8;
+function trampoline5(handle) {
+  const handleEntry = rscTableRemove(handleTable8, handle);
+  if (handleEntry.own) {
+    throw new TypeError('unreachable resource trampoline')
+  }
+}
+const handleTable9 = [T_FLAG, 0];
+const captureTable9= new Map();
+let captureCnt9 = 0;
+handleTables[9] = handleTable9;
 function trampoline6(handle) {
+  const handleEntry = rscTableRemove(handleTable9, handle);
+  if (handleEntry.own) {
+    throw new TypeError('unreachable resource trampoline')
+  }
+}
+function trampoline7(handle) {
+  const handleEntry = rscTableRemove(handleTable5, handle);
+  if (handleEntry.own) {
+    
+    const rsc = captureTable5.get(handleEntry.rep);
+    if (rsc) {
+      if (rsc[symbolDispose]) rsc[symbolDispose]();
+      captureTable5.delete(handleEntry.rep);
+    } else if (DirectoryEntryStream[symbolCabiDispose]) {
+      DirectoryEntryStream[symbolCabiDispose](handleEntry.rep);
+    }
+  }
+}
+function trampoline8(handle) {
   const handleEntry = rscTableRemove(handleTable4, handle);
   if (handleEntry.own) {
     
@@ -1992,8 +2850,47 @@ function trampoline6(handle) {
     if (rsc) {
       if (rsc[symbolDispose]) rsc[symbolDispose]();
       captureTable4.delete(handleEntry.rep);
-    } else if (TerminalOutput[symbolCabiDispose]) {
-      TerminalOutput[symbolCabiDispose](handleEntry.rep);
+    } else if (Descriptor[symbolCabiDispose]) {
+      Descriptor[symbolCabiDispose](handleEntry.rep);
+    }
+  }
+}
+function trampoline9(handle) {
+  const handleEntry = rscTableRemove(handleTable3, handle);
+  if (handleEntry.own) {
+    
+    const rsc = captureTable3.get(handleEntry.rep);
+    if (rsc) {
+      if (rsc[symbolDispose]) rsc[symbolDispose]();
+      captureTable3.delete(handleEntry.rep);
+    } else if (OutputStream[symbolCabiDispose]) {
+      OutputStream[symbolCabiDispose](handleEntry.rep);
+    }
+  }
+}
+function trampoline10(handle) {
+  const handleEntry = rscTableRemove(handleTable0, handle);
+  if (handleEntry.own) {
+    
+    const rsc = captureTable0.get(handleEntry.rep);
+    if (rsc) {
+      if (rsc[symbolDispose]) rsc[symbolDispose]();
+      captureTable0.delete(handleEntry.rep);
+    } else if (Error$1[symbolCabiDispose]) {
+      Error$1[symbolCabiDispose](handleEntry.rep);
+    }
+  }
+}
+function trampoline11(handle) {
+  const handleEntry = rscTableRemove(handleTable2, handle);
+  if (handleEntry.own) {
+    
+    const rsc = captureTable2.get(handleEntry.rep);
+    if (rsc) {
+      if (rsc[symbolDispose]) rsc[symbolDispose]();
+      captureTable2.delete(handleEntry.rep);
+    } else if (InputStream[symbolCabiDispose]) {
+      InputStream[symbolCabiDispose](handleEntry.rep);
     }
   }
 }
@@ -2002,85 +2899,91 @@ const $init = (() => {
   let gen = (function* init () {
     const module0 = fetchCompile(new URL('./index.core.wasm', import.meta.url));
     const module1 = fetchCompile(new URL('./index.core2.wasm', import.meta.url));
-    const module2 = base64Compile('AGFzbQEAAAABKgdgAX8AYAJ/fwBgAn9/AX9gBH9/f38AYAR/f39/AX9gA39+fwBgAn5/AAMaGQQCAgICAgIAAAABAQUBAQEBAwEDBgAAAAAEBQFwARkZB38aATAAAAExAAEBMgACATMAAwE0AAQBNQAFATYABgE3AAcBOAAIATkACQIxMAAKAjExAAsCMTIADAIxMwANAjE0AA4CMTUADwIxNgAQAjE3ABECMTgAEgIxOQATAjIwABQCMjEAFQIyMgAWAjIzABcCMjQAGAgkaW1wb3J0cwEACq0CGQ8AIAAgASACIANBABEEAAsLACAAIAFBARECAAsLACAAIAFBAhECAAsLACAAIAFBAxECAAsLACAAIAFBBBECAAsLACAAIAFBBRECAAsLACAAIAFBBhECAAsJACAAQQcRAAALCQAgAEEIEQAACwkAIABBCREAAAsLACAAIAFBChEBAAsLACAAIAFBCxEBAAsNACAAIAEgAkEMEQUACwsAIAAgAUENEQEACwsAIAAgAUEOEQEACwsAIAAgAUEPEQEACwsAIAAgAUEQEQEACw8AIAAgASACIANBEREDAAsLACAAIAFBEhEBAAsPACAAIAEgAiADQRMRAwALCwAgACABQRQRBgALCQAgAEEVEQAACwkAIABBFhEAAAsJACAAQRcRAAALCQAgAEEYEQAACwAvCXByb2R1Y2VycwEMcHJvY2Vzc2VkLWJ5AQ13aXQtY29tcG9uZW50BzAuMjE5LjE');
-    const module3 = base64Compile('AGFzbQEAAAABKgdgAX8AYAJ/fwBgAn9/AX9gBH9/f38AYAR/f39/AX9gA39+fwBgAn5/AAKcARoAATAABAABMQACAAEyAAIAATMAAgABNAACAAE1AAIAATYAAgABNwAAAAE4AAAAATkAAAACMTAAAQACMTEAAQACMTIABQACMTMAAQACMTQAAQACMTUAAQACMTYAAQACMTcAAwACMTgAAQACMTkAAwACMjAABgACMjEAAAACMjIAAAACMjMAAAACMjQAAAAIJGltcG9ydHMBcAEZGQkfAQBBAAsZAAECAwQFBgcICQoLDA0ODxAREhMUFRYXGAAvCXByb2R1Y2VycwEMcHJvY2Vzc2VkLWJ5AQ13aXQtY29tcG9uZW50BzAuMjE5LjE');
+    const module2 = base64Compile('AGFzbQEAAAABXg1gAn9/AGACf38Bf2ABfwBgAX8Bf2AEf39/fwBgCX9/f39/fn5/fwF/YAV/f39+fwF/YAR/f39/AX9gA39/fwF/YAd/f39/f39/AGADf35/AGAFf39/f38AYAJ+fwADHRwFBgcBAQEDAQgCAwIAAAAJCgAAAAALAAQABAwCBAUBcAEcHAeOAR0BMAAAATEAAQEyAAIBMwADATQABAE1AAUBNgAGATcABwE4AAgBOQAJAjEwAAoCMTEACwIxMgAMAjEzAA0CMTQADgIxNQAPAjE2ABACMTcAEQIxOAASAjE5ABMCMjAAFAIyMQAVAjIyABYCMjMAFwIyNAAYAjI1ABkCMjYAGgIyNwAbCCRpbXBvcnRzAQAK+wIcGQAgACABIAIgAyAEIAUgBiAHIAhBABEFAAsRACAAIAEgAiADIARBAREGAAsPACAAIAEgAiADQQIRBwALCwAgACABQQMRAQALCwAgACABQQQRAQALCwAgACABQQURAQALCQAgAEEGEQMACwsAIAAgAUEHEQEACw0AIAAgASACQQgRCAALCQAgAEEJEQIACwkAIABBChEDAAsJACAAQQsRAgALCwAgACABQQwRAAALCwAgACABQQ0RAAALCwAgACABQQ4RAAALFQAgACABIAIgAyAEIAUgBkEPEQkACw0AIAAgASACQRARCgALCwAgACABQRERAAALCwAgACABQRIRAAALCwAgACABQRMRAAALCwAgACABQRQRAAALEQAgACABIAIgAyAEQRURCwALCwAgACABQRYRAAALDwAgACABIAIgA0EXEQQACwsAIAAgAUEYEQAACw8AIAAgASACIANBGREEAAsLACAAIAFBGhEMAAsJACAAQRsRAgALAC8JcHJvZHVjZXJzAQxwcm9jZXNzZWQtYnkBDXdpdC1jb21wb25lbnQHMC4yMTkuMQ');
+    const module3 = base64Compile('AGFzbQEAAAABYg5gCX9/f39/fn5/fwF/YAV/f39+fwF/YAR/f39/AX9gAn9/AX9gAX8Bf2ADf39/AX9gAX8AYAF/AGACf38AYAd/f39/f39/AGADf35/AGAFf39/f38AYAR/f39/AGACfn8AAq4BHQABMAAAAAExAAEAATIAAgABMwADAAE0AAMAATUAAwABNgAEAAE3AAMAATgABQABOQAGAAIxMAAEAAIxMQAHAAIxMgAIAAIxMwAIAAIxNAAIAAIxNQAJAAIxNgAKAAIxNwAIAAIxOAAIAAIxOQAIAAIyMAAIAAIyMQALAAIyMgAIAAIyMwAMAAIyNAAIAAIyNQAMAAIyNgANAAIyNwAHAAgkaW1wb3J0cwFwARwcCSIBAEEACxwAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobAC8JcHJvZHVjZXJzAQxwcm9jZXNzZWQtYnkBDXdpdC1jb21wb25lbnQHMC4yMTkuMQAcBG5hbWUAFRR3aXQtY29tcG9uZW50OmZpeHVwcw');
     ({ exports: exports0 } = yield instantiateCore(yield module2));
     ({ exports: exports1 } = yield instantiateCore(yield module0, {
+      'wasi:io/poll@0.2.0': {
+        '[resource-drop]pollable': trampoline0,
+      },
+      'wasi:io/streams@0.2.0': {
+        '[resource-drop]input-stream': trampoline1,
+        '[resource-drop]output-stream': trampoline2,
+      },
+      'wasi:sockets/tcp@0.2.0': {
+        '[resource-drop]tcp-socket': trampoline6,
+      },
+      'wasi:sockets/udp@0.2.0': {
+        '[resource-drop]incoming-datagram-stream': trampoline4,
+        '[resource-drop]outgoing-datagram-stream': trampoline5,
+        '[resource-drop]udp-socket': trampoline3,
+      },
       wasi_snapshot_preview1: {
-        args_get: exports0['2'],
-        args_sizes_get: exports0['1'],
+        adapter_close_badfd: exports0['10'],
         environ_get: exports0['4'],
         environ_sizes_get: exports0['5'],
-        fd_fdstat_get: exports0['6'],
-        fd_write: exports0['0'],
-        proc_exit: exports0['7'],
+        fd_close: exports0['6'],
+        fd_prestat_dir_name: exports0['8'],
+        fd_prestat_get: exports0['7'],
+        fd_readdir: exports0['1'],
+        fd_write: exports0['2'],
+        path_open: exports0['0'],
+        proc_exit: exports0['9'],
         random_get: exports0['3'],
       },
     }));
     ({ exports: exports2 } = yield instantiateCore(yield module1, {
       __main_module__: {
-        _start: exports1._start,
         cabi_realloc: exports1.cabi_realloc,
       },
       env: {
         memory: exports1.memory,
       },
       'wasi:cli/environment@0.2.0': {
-        'get-arguments': exports0['8'],
-        'get-environment': exports0['9'],
+        'get-environment': exports0['11'],
       },
       'wasi:cli/exit@0.2.0': {
-        exit: trampoline9,
+        exit: trampoline15,
       },
       'wasi:cli/stderr@0.2.0': {
-        'get-stderr': trampoline4,
+        'get-stderr': trampoline12,
       },
       'wasi:cli/stdin@0.2.0': {
-        'get-stdin': trampoline7,
+        'get-stdin': trampoline13,
       },
       'wasi:cli/stdout@0.2.0': {
-        'get-stdout': trampoline8,
-      },
-      'wasi:cli/terminal-input@0.2.0': {
-        '[resource-drop]terminal-input': trampoline5,
-      },
-      'wasi:cli/terminal-output@0.2.0': {
-        '[resource-drop]terminal-output': trampoline6,
-      },
-      'wasi:cli/terminal-stderr@0.2.0': {
-        'get-terminal-stderr': exports0['24'],
-      },
-      'wasi:cli/terminal-stdin@0.2.0': {
-        'get-terminal-stdin': exports0['22'],
-      },
-      'wasi:cli/terminal-stdout@0.2.0': {
-        'get-terminal-stdout': exports0['23'],
+        'get-stdout': trampoline14,
       },
       'wasi:filesystem/preopens@0.2.0': {
-        'get-directories': exports0['21'],
+        'get-directories': exports0['27'],
       },
       'wasi:filesystem/types@0.2.0': {
-        '[method]descriptor.append-via-stream': exports0['13'],
-        '[method]descriptor.get-flags': exports0['10'],
-        '[method]descriptor.get-type': exports0['14'],
-        '[method]descriptor.stat': exports0['15'],
-        '[method]descriptor.write-via-stream': exports0['12'],
-        '[resource-drop]descriptor': trampoline0,
-        'filesystem-error-code': exports0['11'],
+        '[method]descriptor.append-via-stream': exports0['17'],
+        '[method]descriptor.get-type': exports0['18'],
+        '[method]descriptor.metadata-hash': exports0['20'],
+        '[method]descriptor.metadata-hash-at': exports0['21'],
+        '[method]descriptor.open-at': exports0['15'],
+        '[method]descriptor.read-directory': exports0['13'],
+        '[method]descriptor.stat': exports0['19'],
+        '[method]descriptor.write-via-stream': exports0['16'],
+        '[method]directory-entry-stream.read-directory-entry': exports0['14'],
+        '[resource-drop]descriptor': trampoline8,
+        '[resource-drop]directory-entry-stream': trampoline7,
+        'filesystem-error-code': exports0['12'],
       },
       'wasi:io/error@0.2.0': {
-        '[resource-drop]error': trampoline2,
+        '[resource-drop]error': trampoline10,
       },
       'wasi:io/streams@0.2.0': {
-        '[method]output-stream.blocking-flush': exports0['18'],
-        '[method]output-stream.blocking-write-and-flush': exports0['19'],
-        '[method]output-stream.check-write': exports0['16'],
-        '[method]output-stream.write': exports0['17'],
-        '[resource-drop]input-stream': trampoline3,
-        '[resource-drop]output-stream': trampoline1,
+        '[method]output-stream.blocking-flush': exports0['24'],
+        '[method]output-stream.blocking-write-and-flush': exports0['25'],
+        '[method]output-stream.check-write': exports0['22'],
+        '[method]output-stream.write': exports0['23'],
+        '[resource-drop]input-stream': trampoline11,
+        '[resource-drop]output-stream': trampoline9,
       },
       'wasi:random/random@0.2.0': {
-        'get-random-bytes': exports0['20'],
+        'get-random-bytes': exports0['26'],
       },
     }));
     memory0 = exports1.memory;
@@ -2088,33 +2991,38 @@ const $init = (() => {
     ({ exports: exports3 } = yield instantiateCore(yield module3, {
       '': {
         $imports: exports0.$imports,
-        '0': exports2.fd_write,
-        '1': exports2.args_sizes_get,
-        '10': trampoline12,
-        '11': trampoline13,
-        '12': trampoline14,
-        '13': trampoline15,
-        '14': trampoline16,
-        '15': trampoline17,
-        '16': trampoline18,
-        '17': trampoline19,
-        '18': trampoline20,
-        '19': trampoline21,
-        '2': exports2.args_get,
-        '20': trampoline22,
-        '21': trampoline23,
-        '22': trampoline24,
-        '23': trampoline25,
-        '24': trampoline26,
+        '0': exports2.path_open,
+        '1': exports2.fd_readdir,
+        '10': exports2.adapter_close_badfd,
+        '11': trampoline16,
+        '12': trampoline17,
+        '13': trampoline18,
+        '14': trampoline19,
+        '15': trampoline20,
+        '16': trampoline21,
+        '17': trampoline22,
+        '18': trampoline23,
+        '19': trampoline24,
+        '2': exports2.fd_write,
+        '20': trampoline25,
+        '21': trampoline26,
+        '22': trampoline27,
+        '23': trampoline28,
+        '24': trampoline29,
+        '25': trampoline30,
+        '26': trampoline31,
+        '27': trampoline32,
         '3': exports2.random_get,
         '4': exports2.environ_get,
         '5': exports2.environ_sizes_get,
-        '6': exports2.fd_fdstat_get,
-        '7': exports2.proc_exit,
-        '8': trampoline10,
-        '9': trampoline11,
+        '6': exports2.fd_close,
+        '7': exports2.fd_prestat_get,
+        '8': exports2.fd_prestat_dir_name,
+        '9': exports2.proc_exit,
       },
     }));
+    realloc1 = exports1.cabi_realloc;
+    postReturn0 = exports1['cabi_post_run-with-config'];
   })();
   let promise, resolve, reject;
   function runNext (value) {
@@ -2140,9 +3048,5 @@ const $init = (() => {
 })();
 
 await $init;
-const run020 = {
-  run: run,
-  
-};
 
-export { run020 as run,  }
+export { runWithConfig,  }
