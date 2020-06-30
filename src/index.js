@@ -2690,64 +2690,22 @@ function trampoline32(arg0) {
   dataView(memory0).setInt32(arg0 + 0, result3, true);
 }
 let exports3;
-let realloc1;
-let postReturn0;
 
-function runWithConfig(arg0, arg1) {
-  var ptr0 = utf8Encode(arg0, realloc1, memory0);
-  var len0 = utf8EncodedLen;
-  var val1 = arg1;
-  let enum1;
-  switch (val1) {
-    case 'all': {
-      enum1 = 0;
-      break;
-    }
-    case 'github': {
-      enum1 = 1;
-      break;
-    }
-    case 'npm': {
-      enum1 = 2;
-      break;
-    }
-    case 'cargo': {
-      enum1 = 3;
-      break;
-    }
-    default: {
-      
-      throw new TypeError(`"${val1}" is not one of the cases of github-target`);
-    }
-  }
-  const ret = exports1['run-with-config'](ptr0, len0, enum1);
-  let variant4;
-  if (dataView(memory0).getUint8(ret + 0, true)) {
-    let variant3;
-    switch (dataView(memory0).getUint8(ret + 4, true)) {
-      case 0: {
-        var ptr2 = dataView(memory0).getInt32(ret + 8, true);
-        var len2 = dataView(memory0).getInt32(ret + 12, true);
-        var result2 = utf8Decoder.decode(new Uint8Array(memory0.buffer, ptr2, len2));
-        variant3= {
-          tag: 'custom',
-          val: result2
-        };
-        break;
-      }
-    }
-    variant4= {
+function run() {
+  const ret = exports2['wasi:cli/run@0.2.0#run']();
+  let variant0;
+  if (ret) {
+    variant0= {
       tag: 'err',
-      val: variant3
+      val: undefined
     };
   } else {
-    variant4= {
+    variant0= {
       tag: 'ok',
       val: undefined
     };
   }
-  const retVal = variant4;
-  postReturn0(ret);
+  const retVal = variant0;
   if (typeof retVal === 'object' && retVal.tag === 'err') {
     throw new ComponentError(retVal.val);
   }
@@ -2900,7 +2858,7 @@ const $init = (() => {
     const module0 = fetchCompile(new URL('./index.core.wasm', import.meta.url));
     const module1 = fetchCompile(new URL('./index.core2.wasm', import.meta.url));
     const module2 = base64Compile('AGFzbQEAAAABXg1gAn9/AGACf38Bf2ABfwBgAX8Bf2AEf39/fwBgCX9/f39/fn5/fwF/YAV/f39+fwF/YAR/f39/AX9gA39/fwF/YAd/f39/f39/AGADf35/AGAFf39/f38AYAJ+fwADHRwFBgcBAQEDAQgCAwIAAAAJCgAAAAALAAQABAwCBAUBcAEcHAeOAR0BMAAAATEAAQEyAAIBMwADATQABAE1AAUBNgAGATcABwE4AAgBOQAJAjEwAAoCMTEACwIxMgAMAjEzAA0CMTQADgIxNQAPAjE2ABACMTcAEQIxOAASAjE5ABMCMjAAFAIyMQAVAjIyABYCMjMAFwIyNAAYAjI1ABkCMjYAGgIyNwAbCCRpbXBvcnRzAQAK+wIcGQAgACABIAIgAyAEIAUgBiAHIAhBABEFAAsRACAAIAEgAiADIARBAREGAAsPACAAIAEgAiADQQIRBwALCwAgACABQQMRAQALCwAgACABQQQRAQALCwAgACABQQURAQALCQAgAEEGEQMACwsAIAAgAUEHEQEACw0AIAAgASACQQgRCAALCQAgAEEJEQIACwkAIABBChEDAAsJACAAQQsRAgALCwAgACABQQwRAAALCwAgACABQQ0RAAALCwAgACABQQ4RAAALFQAgACABIAIgAyAEIAUgBkEPEQkACw0AIAAgASACQRARCgALCwAgACABQRERAAALCwAgACABQRIRAAALCwAgACABQRMRAAALCwAgACABQRQRAAALEQAgACABIAIgAyAEQRURCwALCwAgACABQRYRAAALDwAgACABIAIgA0EXEQQACwsAIAAgAUEYEQAACw8AIAAgASACIANBGREEAAsLACAAIAFBGhEMAAsJACAAQRsRAgALAC8JcHJvZHVjZXJzAQxwcm9jZXNzZWQtYnkBDXdpdC1jb21wb25lbnQHMC4yMTkuMQ');
-    const module3 = base64Compile('AGFzbQEAAAABYg5gCX9/f39/fn5/fwF/YAV/f39+fwF/YAR/f39/AX9gAn9/AX9gAX8Bf2ADf39/AX9gAX8AYAF/AGACf38AYAd/f39/f39/AGADf35/AGAFf39/f38AYAR/f39/AGACfn8AAq4BHQABMAAAAAExAAEAATIAAgABMwADAAE0AAMAATUAAwABNgAEAAE3AAMAATgABQABOQAGAAIxMAAEAAIxMQAHAAIxMgAIAAIxMwAIAAIxNAAIAAIxNQAJAAIxNgAKAAIxNwAIAAIxOAAIAAIxOQAIAAIyMAAIAAIyMQALAAIyMgAIAAIyMwAMAAIyNAAIAAIyNQAMAAIyNgANAAIyNwAHAAgkaW1wb3J0cwFwARwcCSIBAEEACxwAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobAC8JcHJvZHVjZXJzAQxwcm9jZXNzZWQtYnkBDXdpdC1jb21wb25lbnQHMC4yMTkuMQAcBG5hbWUAFRR3aXQtY29tcG9uZW50OmZpeHVwcw');
+    const module3 = base64Compile('AGFzbQEAAAABXg1gAn9/AGACf38Bf2ABfwBgAX8Bf2AEf39/fwBgCX9/f39/fn5/fwF/YAV/f39+fwF/YAR/f39/AX9gA39/fwF/YAd/f39/f39/AGADf35/AGAFf39/f38AYAJ+fwACrgEdAAEwAAUAATEABgABMgAHAAEzAAEAATQAAQABNQABAAE2AAMAATcAAQABOAAIAAE5AAIAAjEwAAMAAjExAAIAAjEyAAAAAjEzAAAAAjE0AAAAAjE1AAkAAjE2AAoAAjE3AAAAAjE4AAAAAjE5AAAAAjIwAAAAAjIxAAsAAjIyAAAAAjIzAAQAAjI0AAAAAjI1AAQAAjI2AAwAAjI3AAIACCRpbXBvcnRzAXABHBwJIgEAQQALHAABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhsALwlwcm9kdWNlcnMBDHByb2Nlc3NlZC1ieQENd2l0LWNvbXBvbmVudAcwLjIxOS4x');
     ({ exports: exports0 } = yield instantiateCore(yield module2));
     ({ exports: exports1 } = yield instantiateCore(yield module0, {
       'wasi:io/poll@0.2.0': {
@@ -2934,6 +2892,7 @@ const $init = (() => {
     }));
     ({ exports: exports2 } = yield instantiateCore(yield module1, {
       __main_module__: {
+        _start: exports1._start,
         cabi_realloc: exports1.cabi_realloc,
       },
       env: {
@@ -3021,8 +2980,6 @@ const $init = (() => {
         '9': exports2.proc_exit,
       },
     }));
-    realloc1 = exports1.cabi_realloc;
-    postReturn0 = exports1['cabi_post_run-with-config'];
   })();
   let promise, resolve, reject;
   function runNext (value) {
@@ -3048,5 +3005,9 @@ const $init = (() => {
 })();
 
 await $init;
+const run020 = {
+  run: run,
+  
+};
 
-export { runWithConfig,  }
+export { run020 as run,  }

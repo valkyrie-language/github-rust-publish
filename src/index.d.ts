@@ -1,20 +1,3 @@
-export type GithubError = GithubErrorCustom;
-export interface GithubErrorCustom {
-  tag: 'custom',
-  val: string,
-}
-/**
-* # Variants
-* 
-* ## `"all"`
-* 
-* ## `"github"`
-* 
-* ## `"npm"`
-* 
-* ## `"cargo"`
-*/
-export type GithubTarget = 'all' | 'github' | 'npm' | 'cargo';
 import { WasiCliEnvironment } from './interfaces/wasi-cli-environment.js';
 import { WasiCliExit } from './interfaces/wasi-cli-exit.js';
 import { WasiCliStderr } from './interfaces/wasi-cli-stderr.js';
@@ -29,4 +12,5 @@ import { WasiIoStreams } from './interfaces/wasi-io-streams.js';
 import { WasiRandomRandom } from './interfaces/wasi-random-random.js';
 import { WasiSocketsTcp } from './interfaces/wasi-sockets-tcp.js';
 import { WasiSocketsUdp } from './interfaces/wasi-sockets-udp.js';
-export function runWithConfig(config: string, target: GithubTarget): void;
+import { WasiCliRun } from './interfaces/wasi-cli-run.js';
+export const run: typeof WasiCliRun;
