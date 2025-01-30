@@ -1,6 +1,6 @@
 export namespace WasiIoStreams {
-  export { OutputStream };
   export { InputStream };
+  export { OutputStream };
 }
 import type { Error } from './wasi-io-error.js';
 export { Error };
@@ -14,6 +14,8 @@ export interface StreamErrorClosed {
 }
 
 export class InputStream {
+  read(len: bigint): Uint8Array;
+  blockingRead(len: bigint): Uint8Array;
 }
 
 export class OutputStream {
