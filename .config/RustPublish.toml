@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = ["projects/*"]
+default-members = [
+    #    "projects/v-cli",
+    "projects/publish-rs",
+]
+exclude = [
+    "projects/.DS_Store",
+    "projects/publish-wasm32-wasi",
+]

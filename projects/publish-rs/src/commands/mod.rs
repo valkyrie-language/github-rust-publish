@@ -1,8 +1,10 @@
-use std::env::{current_dir, current_exe};
-use std::path::Path;
 use crate::{
     GithubError, bindings,
     bindings::{Guest, export},
+};
+use std::{
+    env::{VarError, current_dir, current_exe},
+    path::{Path, PathBuf},
 };
 
 pub struct RunningContext {}
@@ -18,13 +20,17 @@ impl Guest for RunningContext {
 
 impl RunningContext {
     async fn run(&self, config: String) -> Result<(), GithubError> {
-        let args = std::env::args();
-        println!("Args: {:?}", args);
-        println!("Dir: {:?}", current_dir());
-        println!("Exe: {:?}", current_exe());
-        println!("Config: {}", config);
-        println!("Config: {:?}", Path::new(&config).canonicalize());
-        println!("Env: {:?}", std::env::vars());
+        match std::env::var("GITHUB_WORKSPACE") {
+            Ok(s) => {
+                let config = PathBuf::from(s).join(&config);
+                let txt = std::fs::read_to_string(config);
+                println!("Config: {:?}", txt)
+            }
+            Err(e) => {
+                println!("{}", e)
+            }
+        }
+        println!("Env: {:#?}", std::env::vars());
         Ok(())
     }
 }
