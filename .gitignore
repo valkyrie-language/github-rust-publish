@@ -1,1 +1,7 @@
-.idea/*
+.idea/
+src/
+node_modules/
+github-wasm32-wasi.wasm
+package-lock.json
+.npmignore
+readme.md
