@@ -1,49 +1,25 @@
-use std::{
-    error::Error,
-    fmt::{Debug, Display, Formatter},
-};
+use crate::bindings::GithubError;
 
-mod convert;
-
-pub struct GithubError {
-    kind: Box<LegionErrorKind>,
-}
-
-#[derive(Debug)]
-pub enum LegionErrorKind {
-    Custom { message: String },
-}
-
-impl Error for GithubError {}
-
-impl Debug for GithubError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        Debug::fmt(&self.kind, f)
-    }
-}
-impl Display for GithubError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        Display::fmt(&self.kind, f)
-    }
-}
-impl Display for LegionErrorKind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            LegionErrorKind::Custom { message } => {
-                write!(f, "{}", message)
-            }
-        }
+impl From<std::io::Error> for GithubError {
+    fn from(error: std::io::Error) -> Self {
+        GithubError::Custom(error.to_string())
     }
 }
 
-impl AsRef<LegionErrorKind> for GithubError {
-    fn as_ref(&self) -> &LegionErrorKind {
-        &self.kind
+impl From<anyhow::Error> for GithubError {
+    fn from(error: anyhow::Error) -> Self {
+        GithubError::Custom(error.to_string())
     }
 }
 
-impl AsMut<LegionErrorKind> for GithubError {
-    fn as_mut(&mut self) -> &mut LegionErrorKind {
-        &mut self.kind
+impl From<wat::Error> for GithubError {
+    fn from(error: wat::Error) -> Self {
+        GithubError::Custom(error.to_string())
+    }
+}
+
+impl From<dialoguer::Error> for GithubError {
+    fn from(error: dialoguer::Error) -> Self {
+        GithubError::Custom(error.to_string())
     }
 }

@@ -21,6 +21,7 @@ reqwest = { version = "0.12.12", features = ["socks"] }
 dialoguer = "0.11.0"
 tokio = { version = "1.43.0", features = ["rt", "macros"] }
 tempfile = { version = "3.16.0", features = ["nightly"] }
+wit-bindgen-rt = "0.38.0"
 
 [dev-dependencies]
 

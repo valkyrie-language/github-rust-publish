@@ -1,8 +1,9 @@
 pub mod commands;
 mod errors;
+pub use crate::bindings::GithubError;
 use crate::commands::{LegionArguments, LegionCommands};
-pub use crate::errors::GithubError;
 use clap::Parser;
+mod bindings;
 
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
