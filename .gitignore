@@ -17,3 +17,4 @@ Cargo.lock
 node_modules/
 github-wasm32-wasi.wasm
 package-lock.json
+projects/publish-wasm32-wasi/src/
