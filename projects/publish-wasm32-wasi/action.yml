@@ -11,9 +11,13 @@ env:
   GITHUB_TOKEN: Secret provided by github.com
   CRATES_TOKEN: Secret provided by crates.io
 inputs:
+  mode:
+    description: publish to which package manager
+    required: false
+    default: all
   config:
-    description: Path of the config file
-    required: true
+    description: path of the publish config file
+    required: false
     default: .config/rust-publish.toml
 outputs:
   DEPLOYMENT_STATUS:
