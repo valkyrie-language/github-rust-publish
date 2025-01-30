@@ -1,5 +1,5 @@
 name: Rust Auto Publish
-description: Auto publish rust binary to github release
+description: auto publish rust binary to github release
 author: Aster <192607617@qq.com>
 branding:
   icon: package
