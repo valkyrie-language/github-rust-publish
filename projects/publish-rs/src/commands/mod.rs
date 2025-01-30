@@ -3,14 +3,14 @@ use crate::{
     bindings::{Guest, export},
 };
 use std::{
-    env::{VarError, current_dir, current_exe},
     path::{Path, PathBuf},
 };
+use crate::bindings::GithubTarget;
 
 pub struct RunningContext {}
 
 impl Guest for RunningContext {
-    fn run_with_config(config: String) -> Result<(), GithubError> {
+    fn run_with_config(config: String, target: GithubTarget) -> Result<(), GithubError> {
         tokio::runtime::Builder::new_current_thread().enable_all().build()?.block_on(async {
             let ctx = RunningContext {};
             ctx.run(config).await

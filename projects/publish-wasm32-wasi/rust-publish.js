@@ -3,4 +3,4 @@
 import {getInput} from '@actions/core';
 import {runWithConfig} from "./src/index.js";
 
-runWithConfig(getInput('config'))
+runWithConfig(getInput('config'), getInput('mode'))

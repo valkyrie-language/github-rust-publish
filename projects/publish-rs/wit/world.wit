@@ -4,6 +4,11 @@ world action {
     variant github-error {
         custom(string)
     }
-
-    export run-with-config: func(config: string) -> result<_, github-error>;
+    enum github-target {
+        all,
+        github,
+        npm,
+        cargo,
+    }
+    export run-with-config: func(config: string, target: github-target) -> result<_, github-error>;
 }
