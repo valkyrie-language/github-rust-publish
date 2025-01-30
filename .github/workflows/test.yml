@@ -16,4 +16,4 @@ jobs:
       - name: Deploy Rust to GitHub Pages
         uses: valkyrie-language/github-rust-publish@v0.0.3
         with:
-          config: .config/Publish.toml
+          config: .config/RustPublish.toml
