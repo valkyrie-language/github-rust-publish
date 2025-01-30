@@ -5,12 +5,20 @@ use crate::{
 use std::{
     path::{Path, PathBuf},
 };
+use std::env::VarError;
 use crate::bindings::GithubTarget;
 
 pub struct RunningContext {}
 
 impl Guest for RunningContext {
     fn run_with_config(config: String, target: GithubTarget) -> Result<(), GithubError> {
+        match std::env::var("INPUT_CONFIG") {
+            Ok(o) => {o}
+            Err(_) => {
+                println!("MissingConfig {}")
+            }
+        }
+
         tokio::runtime::Builder::new_current_thread().enable_all().build()?.block_on(async {
             let ctx = RunningContext {};
             ctx.run(config).await

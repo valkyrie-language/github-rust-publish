@@ -17,3 +17,4 @@ jobs:
         uses: valkyrie-language/github-rust-publish@v0.0.3
         with:
           config: .config/rust-publish.toml
+          mode: all
