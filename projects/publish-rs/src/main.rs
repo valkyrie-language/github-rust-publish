@@ -1,7 +1,9 @@
 use clap::Parser;
 use github::{GithubCLI, GithubError};
 
-#[tokio::main(flavor = "current_thread")]
-async fn main() -> Result<(), GithubError> {
-    GithubCLI::parse().run().await
+fn main() -> Result<(), GithubError> {
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()?
+        .block_on(async { GithubCLI::parse().run().await })
 }

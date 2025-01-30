@@ -1,0 +1,9 @@
+package github:rust-release;
+
+world action {
+    variant github-error {
+        custom(string)
+    }
+
+    export run-with-config: func(config: string) -> result<_, github-error>;
+}
