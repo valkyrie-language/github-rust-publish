@@ -13,6 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
+      - uses: actions/checkout@v4
       - name: Deploy Rust to GitHub Pages
         uses: valkyrie-language/github-rust-publish@v0.0.4
         with:
