@@ -8,8 +8,3 @@ impl From<std::io::Error> for GithubError {
     }
 }
 
-impl From<dialoguer::Error> for GithubError {
-    fn from(error: dialoguer::Error) -> Self {
-        GithubError::Custom(error.to_string())
-    }
-}

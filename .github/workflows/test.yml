@@ -1,4 +1,4 @@
-name: Test
+name: Publish
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Publish Rust Binaries
-        uses: valkyrie-language/github-rust-publish@v0.0.1
+        uses: valkyrie-language/rust-publish.github@v0.0.1
         with:
           config: .config/rust-publish.toml
           mode: all

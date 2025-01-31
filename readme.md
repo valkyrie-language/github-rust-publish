@@ -18,8 +18,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - name: Publish Rust Binary
-        uses: valkyrie-language/github-rust-publish@v0.0.0
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Publish Rust Binaries
+        uses: valkyrie-language/rust-publish.github@v0.0.1
         with:
-          config: .config/Publish.toml
+          config: .config/rust-publish.toml
+          mode: all
 ```

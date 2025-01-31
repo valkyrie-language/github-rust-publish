@@ -1,11 +1,12 @@
-[workspace]
-resolver = "2"
-members = ["projects/*"]
-default-members = [
-    #    "projects/v-cli",
-    "projects/publish-rs",
-]
-exclude = [
-    "projects/.DS_Store",
-    "projects/publish-wasm32-wasi",
-]
+[[github]]
+path = "projects/publish-rs"
+#bin = "all"
+#bin = [selected]
+
+[[crates]]
+path = "projects/publish-rs"
+
+[[npm]]
+source = "projects/publish-rs"
+path = "projects/publish-wasm32-wasi"
+#bin = "only_one"

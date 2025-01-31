@@ -1,8 +1,10 @@
 mod commands;
 mod errors;
+mod helpers;
 
 pub use crate::errors::GithubError;
-use std::{env::VarError, path::PathBuf, str::FromStr};
+use std::{path::PathBuf, str::FromStr};
+use crate::helpers::{get_input, github_workspace};
 
 #[derive(Debug)]
 pub struct GithubCLI {
@@ -13,21 +15,14 @@ pub struct GithubCLI {
 
 impl GithubCLI {
     pub fn new() -> Result<Self, GithubError> {
-        let root = match std::env::var("GITHUB_WORKSPACE") {
-            Ok(o) => PathBuf::from(o),
-            Err(e) => panic!("{e}"),
-        };
-        let config = match std::env::var("INPUT_CONFIG") {
-            Ok(o) => root.join(o),
-            Err(_) => panic!("Missing `config`"),
-        };
-        let mode = match std::env::var("INPUT_MODE") {
-            Ok(o) => GithubTarget::from_str(&o)?,
-            Err(_) => panic!("Missing `mode`"),
-        };
+        let root = github_workspace();
+        let config = PathBuf::from(get_input("config"));
+        let mode = GithubTarget::from_str(&get_input("mode"))?;
         Ok(GithubCLI { root, config, mode })
     }
 }
+
+
 
 #[repr(u8)]
 #[derive(Clone, Copy, Eq, Debug, Ord, PartialEq, PartialOrd)]
