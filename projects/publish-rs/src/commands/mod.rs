@@ -1,23 +1,21 @@
-use crate::bindings::GithubTarget;
 use crate::{
-    bindings, bindings::{export, Guest},
-    GithubError,
+    GithubError, bindings,
+    bindings::{GithubTarget, Guest, export},
 };
-use std::collections::HashMap;
-use std::path::Path;
+use std::{collections::HashMap, path::Path};
 
 pub struct RunningContext {}
 
 impl Guest for RunningContext {
     fn run_with_config(config: String, target: GithubTarget) -> Result<(), GithubError> {
         match std::env::var("INPUT_CONFIG") {
-            Ok(o) => {o}
+            Ok(o) => {
+                println!("Config Path: {}", o);
+            }
             Err(e) => {
                 println!("MissingConfig {}", e);
-                return Ok(())
             }
         }
-
         tokio::runtime::Builder::new_current_thread().enable_all().build()?.block_on(async {
             let ctx = RunningContext {};
             ctx.run(config).await
@@ -62,7 +60,8 @@ fn read_dir(dir_path: &str) {
                 println!("{}", file_name.to_string_lossy());
             }
         }
-    } else {
+    }
+    else {
         println!("Error reading directory: {}", dir_path);
     }
 }
