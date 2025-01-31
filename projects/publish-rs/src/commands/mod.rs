@@ -1,14 +1,11 @@
-use crate::{
-    GithubError, bindings,
-    bindings::{GithubTarget, Guest, export},
+use crate::{GithubCLI, GithubError};
+use std::{
+    collections::{BTreeMap},
+    path::Path,
 };
-use std::{collections::HashMap, path::Path};
-use std::collections::BTreeMap;
 
-pub struct RunningContext {}
-
-impl Guest for RunningContext {
-    fn run_with_config(config: String, target: GithubTarget) -> Result<(), GithubError> {
+impl GithubCLI {
+    pub async fn run(&self) -> Result<(), GithubError> {
         match std::env::var("INPUT_CONFIG") {
             Ok(o) => {
                 println!("Config Path: {}", o);
@@ -17,15 +14,6 @@ impl Guest for RunningContext {
                 println!("MissingConfig {}", e);
             }
         }
-        tokio::runtime::Builder::new_current_thread().enable_all().build()?.block_on(async {
-            let ctx = RunningContext {};
-            ctx.run(config).await
-        })
-    }
-}
-
-impl RunningContext {
-    async fn run(&self, config: String) -> Result<(), GithubError> {
         match std::env::var("GITHUB_WORKSPACE") {
             Ok(s) => {
                 println!("GITHUB_WORKSPACE");
@@ -57,4 +45,3 @@ fn read_dir(dir_path: &str) {
         println!("Error reading directory: {}", dir_path);
     }
 }
-export!(RunningContext with_types_in bindings);
