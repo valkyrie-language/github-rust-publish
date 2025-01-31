@@ -3,6 +3,7 @@ use crate::{
     bindings::{GithubTarget, Guest, export},
 };
 use std::{collections::HashMap, path::Path};
+use std::collections::BTreeMap;
 
 pub struct RunningContext {}
 
@@ -31,19 +32,10 @@ impl RunningContext {
                 read_dir(&s)
             }
             Err(e) => {
-                println!("{}", e)
+                println!("    {}", e)
             }
         }
-        match std::env::var("RUNNER_WORKSPACE") {
-            Ok(s) => {
-                println!("RUNNER_WORKSPACE");
-                read_dir(&s)
-            }
-            Err(e) => {
-                println!("{}", e)
-            }
-        }
-        let mut envs = HashMap::new();
+        let mut envs = BTreeMap::new();
         for (key, value) in std::env::vars() {
             envs.insert(key, value);
         }
