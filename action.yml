@@ -1,5 +1,5 @@
 name: Rust Auto Publish
-description: Auto publish rust binary to github release
+description: auto publish rust binary to github release
 author: Aster <192607617@qq.com>
 branding:
   icon: package
@@ -12,9 +12,13 @@ env:
   CRATES_TOKEN: Secret provided by crates.io
 inputs:
   config:
-    description: Path of the config file
-    required: true
+    description: path of the publish config file
+    required: false
     default: .config/rust-publish.toml
+  mode:
+    description: publish to which package manager
+    required: false
+    default: all
 outputs:
   DEPLOYMENT_STATUS:
     description: 'The status of the deployment that indicates if the run failed or passed. Possible outputs include: success|failed|skipped'
