@@ -17,6 +17,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Publish Rust Binaries
         uses: valkyrie-language/rust-publish.github@v0.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
         with:
           config: .config/rust-publish.toml
           mode: all
